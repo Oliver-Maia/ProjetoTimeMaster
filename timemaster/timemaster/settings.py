@@ -16,6 +16,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CSRF_TRUSTED_ORIGINS = [f'https://localhost:8000']
+
 
 # Application definition
 
@@ -95,7 +97,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'usuario.usuario'
-
+LOGIN_REDIRECT_URL = '/dashboard/'   
+LOGOUT_REDIRECT_URL = '/login/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
@@ -114,11 +117,11 @@ USE_TZ = True
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / "timemaster" / "static",
+    BASE_DIR / "static",
 ]
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "timemaster" / "staticfiles"
+STATIC_ROOT = BASE_DIR /  "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
