@@ -1,2 +1,2 @@
 # ProjetoTimeMaster
-Projeto em Django voltado para entendimento, tendo como base uma organização necessária em um caso real.
+Projeto em Django voltado para entendimento e aprendizado, tendo como base uma necessidade real.
