@@ -1,5 +1,6 @@
-from django.http import HttpResponse
+from django.shortcuts import render
+from django.contrib.auth.views import LoginView
 
 
-def teste_view(request):
-    return HttpResponse("Teste")
+class telalogin(LoginView):
+    template_name = 'login.html'
