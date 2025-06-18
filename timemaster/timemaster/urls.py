@@ -2,14 +2,18 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LogoutView
 from . import views
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", views.telalogin.as_view(), name ="login"),
-    path("", RedirectView.as_view(url="/login/")),
-    path("__reload__/", include("django_browser_reload.urls"))
+    path('agenda/', include(('agenda.urls', 'agenda'), namespace='agenda')),
+    path('pagina_inicial/', include('PaginaPrincipal.urls')),
+    path('__reload__/', include('django_browser_reload.urls')),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('', RedirectView.as_view(url='/login/')),
 ]
 
 urlpatterns += [

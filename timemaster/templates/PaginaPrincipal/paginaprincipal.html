@@ -1,0 +1,113 @@
+{% load static %}
+
+<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+
+<!--Sidebar-->
+<input type="checkbox" id="check">
+
+<label for="check">
+  <i class="fas fa-bars" id="btn"></i>
+  <i class="fas fa-times" id="cancel"></i>
+</label>
+
+<div class="sidebar">
+  
+  <header>Menu</header>
+      {% load static %}
+  <link rel="stylesheet" href="{% static 'TelaPrincipal/telaprincipal.css' %}">
+    <a href="#" class="link-sidebar active">
+      <i class="fas fa-qrcode"></i>
+      <span>pagina_inicial</span>
+    </a>
+    
+    <a href="#" class="link-sidebar">
+      <i class="fas fa-link"></i>
+      <span>Links</span>
+    </a>
+  
+    <a href="#" class="link-sidebar">
+       <i class="fas fa-edit"></i>
+      <span>Blog</span>
+    </a>
+
+    <a href="#" class="link-sidebar">
+      <i class="far fa-question-circle"></i>
+      <span>Sobre</span>
+    </a>
+    
+    <a href="#" class="link-sidebar">
+      <i class="fas fa-sliders-h"></i>
+      <span>Serviços</span>
+    </a>
+    
+    <a href="#" class="link-sidebar">
+      <i class="far fa-envelope"></i>
+      <span>Contato</span>
+    </a>
+
+</div>
+<!--Sidebar-->
+
+<!--Inicio da tela principal-->
+<div class="main-container">
+
+  <!-- TOPO: logout, boas-vindas etc. -->
+  <div class="top-bar">
+    <span class="welcome">Bem-vindo, {{ user.first_name }}</span>
+    <a href="{% url 'logout' %}" class="logout-link">
+      <i class="fas fa-sign-out-alt"></i>Logout</a>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="pagina_inicial-content">
+    
+    <!-- COLUNA ESQUERDA -->
+    <div class="left-panel">
+      <h2>Obras Pendentes</h2>
+      <ul class="obra-list">
+        {% for obra in obras_pendentes %}
+          <li>{{ obra.nome }} - {{ obra.cliente }}</li>
+        {% empty %}
+          <li>Nenhuma obra pendente.</li>
+        {% endfor %}
+      </ul>
+      <a href="{% url 'agenda:agenda_adicionar' %}" class="btn-agendar">Agendar Obra</a>
+    </div>
+
+    <!-- COLUNA DIREITA -->
+    <div class="right-panel">
+      
+      <!-- AGENDAMENTOS DE HOJE -->
+      <div class="agendamentos-hoje">
+        <h2>Entregas para</h2>
+        <form method="get" class="data-form">
+          <input type="date" name="data" value="{{ data_hoje|date:'Y-m-d' }}">
+          <button type="submit">Buscar</button>
+        </form>
+
+        <ul class="lista-agendamentos">
+          {% for agendamento in agendamentos_hoje %}
+            <li>
+              {{ agendamento.obra }} - {{ agendamento.montador }}
+              <span class="cor" ></span>
+            </li>
+          {% empty %}
+            <li>Sem agendamentos para hoje.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- AGENDA DA SEMANA -->
+      <div class="agenda-semana">
+        <h2>Nessa semana</h2>
+        <ul>
+          {% for dia, entregas in agenda_semana.items %}
+            <li><strong>{{ dia|date:"d/m" }}</strong>: {{ entregas|length }} entrega(s)</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>

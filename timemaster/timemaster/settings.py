@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django_browser_reload",
     "agenda.apps.AgendaConfig",
     "obra.apps.ObraConfig",
+    "PaginaPrincipal.apps.PaginaprincipalConfig",
     "usuario.apps.UsuarioConfig",
 ]
 
@@ -97,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'usuario.usuario'
-LOGIN_REDIRECT_URL = '/dashboard/'   
+LOGIN_REDIRECT_URL = '/pagina_inicial/'   
 LOGOUT_REDIRECT_URL = '/login/'
 
 # Internationalization
