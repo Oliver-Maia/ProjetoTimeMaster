@@ -14,7 +14,7 @@
   left: -240px;
   height: 100%;
   background-color: #202020;
-  transition: all .5s ease;
+  transition: left 0.3s ease, width 0.3s ease
 
 }
 
@@ -152,14 +152,36 @@ label #cancel{
 }
 /*Fim do  sidebar*/
 
+/*Inicio Popup*/
+
+.popup-aviso {
+  background-color: #ffecec;
+  border: 1px solid #ff5e5e;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+  color: #a70000;
+  font-weight: bold;
+}
+
+/*fim popup*/
 
 /*Inicio da tela principal*/
 
 .main-container {
-  margin-left: 250px; /* espaço para sidebar */
+  margin-left: 60px; 
   padding: 20px;
   font-family: 'Lato', sans-serif;
   background-color: #bdbdc5;
+   transition: margin-left 0.3s ease;
+}
+
+#check:checked ~ .sidebar {
+  left: 0;
+}
+
+#check:checked ~ .main-container {
+  margin-left: 240px;
 }
 
 .top-bar {
@@ -170,6 +192,7 @@ label #cancel{
 
 .pagina_inicial-content {
   display: flex;
+  flex-wrap: wrap; 
   gap: 20px;
 }
 
@@ -180,14 +203,21 @@ label #cancel{
   border-radius: 8px;
 }
 
-.left-panel {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
 
+
+.left-panel {
+  flex: 1 1 60%;
+  min-width: 300px;
+  background: #6b6767;
+  padding: 20px;
+  border-radius: 8px;
+}
 .right-panel {
-  width: 60%;
+  flex: 1 1 35%;
+  min-width: 300px;
+  background: #6b6767;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 ul {

@@ -1,15 +1,5 @@
 {% load static %}
 
-<p><strong>Debug obras:</strong> {{ obras_sem_previsao|length }} item(s)</p>
-<ul>
-  {% for obra in obras_sem_previsao %}
-    <li>{{ obra.nome }} - {{ obra.cliente }}</li>
-  {% empty %}
-    <li>Sem obras pendentes.</li>
-  {% endfor %}
-</ul>
-
-
 
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
@@ -58,12 +48,12 @@
     </a>
 
 </div>
-<!--Sidebar-->
+<!--Fim Sidebar-->
 
 <!--Inicio da tela principal-->
 <div class="main-container">
 
-  <!-- TOPO: logout, boas-vindas etc. -->
+
   <div class="top-bar">
     <span class="welcome">Bem-vindo, {{ user.first_name }}</span>
     <a href="{% url 'logout' %}" class="logout-link">
@@ -100,14 +90,14 @@
       <div class="agendamentos-hoje">
         <h2>Entregas para</h2>
         <form method="get" class="data-form">
-          <input type="date" name="data" value="{{ data_hoje|date:'Y-m-d' }}">
+          <input type="date" name="data_hoje" value="{{ data_hoje|date:'Y-m-d' }}">
           <button type="submit">Buscar</button>
         </form>
 
         <ul class="lista-agendamentos">
-          {% for agendamento in agendamentos_hoje %}
+          {% for agendamentos_hoje in agendamento %}
             <li>
-              {{ agendamento.obra }} - {{ agendamento.montador }}
+              {{ agendamento.obra }}
               <span class="cor" ></span>
             </li>
           {% empty %}
@@ -120,9 +110,26 @@
       <div class="agenda-semana">
         <h2>Nessa semana</h2>
         <ul>
-          {% for dia, entregas in agenda_semana.items %}
-            <li><strong>{{ dia|date:"d/m" }}</strong>: {{ entregas|length }} entrega(s)</li>
+          {% for dia, agendamentos in agenda_semana.items %}
+            {% if agendamentos %}
+              <li>
+                <strong>{{ dia|date:"d/m" }}</strong>: 
+                {{ agendamentos|length }} entrega{{ agendamentos|length|pluralize:"s" }}
+              </li>
+            {% else %}
+              <li><strong>{{ dia|date:"d/m" }}</strong>: Nenhuma entrega</li>
+            {% endif %}
           {% endfor %}
+        </ul>
+      </div>
+
+      <!-- ESTATÍSTICAS -->
+      <div class="estatisticas">
+        <h2>Estatísticas</h2>
+        <ul>
+          <li>Total de obras: {{ total_obras }}</li>
+          <li>Total de agendamentos: {{ total_agendamentos }}</li>
+          <li>Obras sem previsão: {{ obras_sem_previsao|length }}</li>
         </ul>
       </div>
 
