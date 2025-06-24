@@ -18,22 +18,22 @@
   <link rel="stylesheet" href="{% static 'TelaPrincipal/telaprincipal.css' %}">
     <a href="#" class="link-sidebar active">
       <i class="fas fa-qrcode"></i>
-      <span>pagina_inicial</span>
+      <span>Pagina Inicial</span>
     </a>
     
     <a href="#" class="link-sidebar">
-      <i class="fas fa-link"></i>
-      <span>Links</span>
+      <i class="fas fa-calendar-days"></i>
+      <span>Agenda</span>
     </a>
   
     <a href="#" class="link-sidebar">
        <i class="fas fa-edit"></i>
-      <span>Blog</span>
+      <span>Obras</span>
     </a>
 
     <a href="#" class="link-sidebar">
       <i class="far fa-question-circle"></i>
-      <span>Sobre</span>
+      <span>Usuarios</span>
     </a>
     
     <a href="#" class="link-sidebar">
@@ -63,17 +63,23 @@
   <div class="pagina_inicial-content">
     
     <!-- COLUNA ESQUERDA -->
-    <div class="left-panel">
-      <h2>Obras Pendentes</h2>
-      <ul class="obra-list">
-        {% for obra in obras_pendentes %}
-          <li>{{ obra.nome }} - {{ obra.cliente }}</li>
-        {% empty %}
-          <li>Nenhuma obra pendente.</li>
-        {% endfor %}
-      </ul>
-      <a href="{% url 'agenda:agenda_adicionar' %}" class="btn-agendar">Agendar Obra</a>
-    </div>
+<div class="left-panel">
+  <h2>Obras Pendentes</h2>
+  <ul class="obra-list">
+    {% for obra in obras_sem_previsao %}
+      <li class="obra-item">
+        <div class="obra-info">
+          <span class="obra-nome">{{ obra.nome }}</span>
+          <span class="obra-cliente">{{ obra.cliente }}</span>
+          <span class="badge badge-warning">Sem data de entrega</span>
+        </div>
+        <a href="{% url 'agenda:agenda_adicionar' obra.id %}" class="btn-agendar">Agendar Obra</a>
+      </li>
+    {% empty %}
+      <li class="nenhuma-obra">Nenhuma obra pendente sem data de entrega.</li>
+    {% endfor %}
+  </ul>
+</div>
 
     <!-- COLUNA DIREITA -->
     <div class="right-panel">
