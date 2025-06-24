@@ -1,5 +1,16 @@
 {% load static %}
 
+<p><strong>Debug obras:</strong> {{ obras_sem_previsao|length }} item(s)</p>
+<ul>
+  {% for obra in obras_sem_previsao %}
+    <li>{{ obra.nome }} - {{ obra.cliente }}</li>
+  {% empty %}
+    <li>Sem obras pendentes.</li>
+  {% endfor %}
+</ul>
+
+
+
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 
@@ -80,6 +91,7 @@
     {% endfor %}
   </ul>
 </div>
+
 
     <!-- COLUNA DIREITA -->
     <div class="right-panel">

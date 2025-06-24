@@ -14,5 +14,12 @@ class agenda(models.Model):
     def __str__(self):
         return self.obra
 
+class Agendamento(models.Model):
+    obra = models.ForeignKey(obra, on_delete=models.CASCADE, related_name='agendamentos')
+    data = models.DateField()
+    montador = models.CharField(max_length=100)  # ou use um FK para um modelo de Funcionário
+
+    def __str__(self):
+        return f"{self.obra.nome} - {self.data} ({self.montador})"
 
 

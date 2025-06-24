@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", views.telalogin.as_view(), name ="login"),
+    path('obras/', include('obra.urls')),
     path('agenda/', include(('agenda.urls', 'agenda'), namespace='agenda')),
     path('pagina_inicial/', include('PaginaPrincipal.urls')),
     path('__reload__/', include('django_browser_reload.urls')),

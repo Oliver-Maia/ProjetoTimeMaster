@@ -1,10 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from obra.models import obra
 
-# Create your views here.
+# View para listar obras pendentes
 
-
-def agenda_home(request):
-    return render(request, 'agenda/home.html')
-
-def agenda_adicionar(request):
-    return render ()
+def agenda_adicionar(request, id):
+    obra_obj = obra.objects.get(id=id)
+    if request.method == 'POST':
+        # Processar o formulário de agendamento aqui
+        nova_data = request.POST.get('data_entrega')
+        obra_obj.previsao_entrega = nova_data
+        obra_obj.save()
+        return redirect('obras_pendentes')
+    
+    return render(request, 'agenda/adicionar.html', {'obra': obra_obj})
