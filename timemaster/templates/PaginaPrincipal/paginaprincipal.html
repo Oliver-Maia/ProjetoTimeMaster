@@ -1,54 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Página Inicial - TimeMaster{% endblock %}
 
-<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+{% block content %}
 
-<!--Sidebar-->
-<input type="checkbox" id="check">
-
-<label for="check">
-  <i class="fas fa-bars" id="btn"></i>
-  <i class="fas fa-times" id="cancel"></i>
-</label>
-
-<div class="sidebar">
-  
-  <header>Menu</header>
-      {% load static %}
-  <link rel="stylesheet" href="{% static 'TelaPrincipal/telaprincipal.css' %}">
-    <a href="#" class="link-sidebar active">
-      <i class="fas fa-qrcode"></i>
-      <span>Pagina Inicial</span>
-    </a>
-    
-    <a href="#" class="link-sidebar">
-      <i class="fas fa-calendar-days"></i>
-      <span>Agenda</span>
-    </a>
-  
-    <a href="{% url 'obra:cadastrar_obra' %}" class="link-sidebar">
-       <i class="fas fa-edit"></i>
-      <span>Obras</span>
-    </a>
-
-    <a href="#" class="link-sidebar">
-      <i class="far fa-question-circle"></i>
-      <span>Usuarios</span>
-    </a>
-    
-    <a href="#" class="link-sidebar">
-      <i class="fas fa-sliders-h"></i>
-      <span>Serviços</span>
-    </a>
-    
-    <a href="#" class="link-sidebar">
-      <i class="far fa-envelope"></i>
-      <span>Contato</span>
-    </a>
-
-</div>
-<!--Fim Sidebar-->
 
 <!--Inicio da tela principal-->
 <div class="main-container">
@@ -136,3 +92,4 @@
     </div>
   </div>
 </div>
+{% endblock %}
