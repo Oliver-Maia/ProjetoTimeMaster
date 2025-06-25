@@ -47,10 +47,25 @@ def index(request):
     semana = [inicio + timedelta(days=i) for i in range(7)]
     agenda_semana_completa = {dia: agenda_semana.get(dia, []) for dia in semana}
 
-    # 🔹 7. Enviar tudo para o template
+    # 🔹 Obras sem previsão
+    obras_sem_previsao = obra.objects.filter(
+        previsao_entrega__isnull=True)
+
+    # 🔹 Obras com agendamento (não realizado)
+    obras_com_agendamento = obra.objects.filter(
+        previsao_entrega__isnull=False,
+        agendamentos__realizado=False
+    ).distinct()
+
+    # 🔹 total de obras que ainda não foram realizadas
+    obras_nao_realizadas = obra.objects.exclude(agendamentos__realizado=True).distinct()
+
+    # 🔹 Enviar tudo para o template
     return render(request, 'PaginaPrincipal/paginaprincipal.html', {
         'data_hoje': data_hoje,
         'agendamentos': agendamentos_hoje,
         'obras_sem_previsao': obras_sem_previsao,
+        'obras_nao_realizadas': obras_nao_realizadas,
+        'obras_com_agendamento': obras_com_agendamento,
         'agenda_semana': agenda_semana_completa,
     })

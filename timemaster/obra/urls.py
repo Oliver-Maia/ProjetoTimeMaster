@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import lista_obras_pendentes
+from . import views
+
+app_name = 'obra'
 
 urlpatterns = [
-    path("", lista_obras_pendentes, name='obras_pendentes'),
+    path('cadastro/', views.cadastrar_obra, name='cadastrar_obra'),
 ]

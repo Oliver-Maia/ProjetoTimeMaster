@@ -27,7 +27,7 @@
       <span>Agenda</span>
     </a>
   
-    <a href="#" class="link-sidebar">
+    <a href="{% url 'obra:cadastrar_obra' %}" class="link-sidebar">
        <i class="fas fa-edit"></i>
       <span>Obras</span>
     </a>
@@ -125,11 +125,11 @@
 
       <!-- ESTATÍSTICAS -->
       <div class="estatisticas">
-        <h2>Estatísticas</h2>
+        <h2>Estatísticas de obras agendadas</h2>
         <ul>
-          <li>Total de obras: {{ total_obras }}</li>
-          <li>Total de agendamentos: {{ total_agendamentos }}</li>
-          <li>Obras sem previsão: {{ obras_sem_previsao|length }}</li>
+          <li>Total de Obras em aberto: {{ obras_nao_realizadas|length }}</li>
+          <li>Obras com agendamento: {{ obras_com_agendamento|length }}</li>
+          <li>Obras sem agendamento: {{ obras_sem_previsao|length }}</li>
         </ul>
       </div>
 
