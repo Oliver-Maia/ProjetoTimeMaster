@@ -45,7 +45,7 @@
       <!-- AGENDAMENTOS DE HOJE -->
       <div class="agendamentos-hoje">
         <h2>Entregas para</h2>
-        <form method="get" action="{% url 'pagina_inicial' %}" class="data-form">
+        <form method="get" action="{% url 'PaginaPrincipal:pagina_inicial' %}" class="data-form">
           <input type="date" name="data_hoje" value="{{ data_hoje|date:'Y-m-d' }}">
           <button type="submit">Buscar</button>
         </form>

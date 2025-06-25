@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -23,12 +24,12 @@
   <header>Menu</header>
       {% load static %}
   <link rel="stylesheet" href="{% static 'TelaPrincipal/telaprincipal.css' %}">
-    <a href="#" class="link-sidebar active">
+    <a href="{% url 'PaginaPrincipal:pagina_inicial' %}" class="link-sidebar active">
       <i class="fas fa-qrcode"></i>
       <span>Pagina Inicial</span>
     </a>
     
-    <a href="#" class="link-sidebar">
+    <a href="{% url 'agenda:novo_agendamento' %}" class="link-sidebar">
       <i class="fas fa-calendar-days"></i>
       <span>Agenda</span>
     </a>
@@ -55,3 +56,11 @@
 
 </div>
 <!--Fim Sidebar-->
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+</body>
+</html>
