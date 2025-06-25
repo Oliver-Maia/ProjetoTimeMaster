@@ -30,7 +30,7 @@
           <span class="obra-cliente">{{ obra.cliente }}</span>
           <span class="badge badge-warning">Sem data de entrega</span>
         </div>
-        <a href="{% url 'agenda:agenda_adicionar' obra.id %}" class="btn-agendar">Agendar Obra</a>
+        <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
       </li>
     {% empty %}
       <li class="nenhuma-obra">Nenhuma obra pendente sem data de entrega.</li>

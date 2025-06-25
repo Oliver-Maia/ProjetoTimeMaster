@@ -16,7 +16,7 @@ class agenda(models.Model):
 
 class Agendamento(models.Model):
     obra = models.ForeignKey(obra, on_delete=models.CASCADE, related_name='agendamentos')
-    data = models.DateTimeField()
+    data = models.DateTimeField(auto_now_add=True)
     montador = models.CharField(max_length=100)  
     data_agendamento = models.DateTimeField()
     realizado = models.BooleanField(default=False)

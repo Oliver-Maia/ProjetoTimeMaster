@@ -11,4 +11,4 @@ class obra(models.Model):
     previsao_entrega = models.DateTimeField('Data prevista para entrega', null=True, blank=True)
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome} - {self.numero}"
