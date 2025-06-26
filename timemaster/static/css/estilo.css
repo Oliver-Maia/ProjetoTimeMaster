@@ -1,25 +1,24 @@
-/*Inicio Sidebar*/
 :root {
-  
-  --accent-color: #fff;
-  --gradient-color: #FBFBFB;
-
+  --accent-color: #fd9432;
+  --gradient-color: #0d32d8;
 }
 
-.sidebar{
-
+/* Sidebar */
+.sidebar {
   position: fixed;
   z-index: 999;
   width: 240px;
   left: -240px;
   height: 100%;
   background-color: #202020;
-  transition: left 0.3s ease, width 0.3s ease
-
+  transition: left 0.3s ease;
 }
 
-.sidebar header{
+.sidebar.sidebar-open {
+  left: 0;
+}
 
+.sidebar header {
   font-size: 28px;
   color: #ffffff;
   line-height: 70px;
@@ -27,11 +26,9 @@
   background-color: #202020;
   user-select: none;
   font-family: 'Lato', sans-serif;
-
 }
 
-.sidebar .link-sidebar{
-
+.link-sidebar {
   display: block;
   height: 65px;
   width: 100%;
@@ -42,112 +39,112 @@
   border-left: 5px solid transparent;
   font-family: 'Lato', sans-serif;
   text-decoration: none;
-  transition: all .5s ease;
+  transition: all 0.3s ease;
 }
 
-.link-sidebar.active,.link-sidebar:hover{
-  border-left: 5px solid var(--accent-color);
-  color: #fff;
-   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
-}
-
-.sidebar .link-sidebar i{
+.link-sidebar i {
   font-size: 23px;
   margin-right: 16px;
 }
 
-.sidebar .link-sidebar span{
+.link-sidebar span {
   letter-spacing: 1px;
   text-transform: uppercase;
 }
 
-#check{
-  display: none;
+.link-sidebar.active,
+.link-sidebar:hover {
+  border-left: 5px solid var(--accent-color);
+  color: #fff;
+  background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
 }
 
-label #btn,label #cancel{
-  
-  position: fixed;
-  z-index: 999;
-  left: 5px;
-  cursor: pointer;
-  color: #ffffff;
-  border-radius: 50px;
-  margin: 15px 30px;
-  margin-left: 30px;
-  font-size: 22px;
+/* Topbar */
+.topbar {
+  height: 60px;
   background-color: #202020;
-  height: 45px;
-  width: 45px;
-  text-align: center;
-  line-height: 44px;
-  transition: all .5s ease;
-
+  color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 998;
+  transition: margin-left 0.3s ease;
 }
 
-label #cancel{
-  opacity: 0;
-  visibility: hidden;
+.topbar-left i {
+  font-size: 22px;
+  cursor: pointer;
 }
 
-#check:checked ~ .sidebar{
-  left: 0;
+.nameuser {
+  font-size: 20px;
+  color: #fff;
+  margin-left: 20px;
+  padding: 0;
+  flex: 0 1 auto;
 }
 
-#check:checked ~ label #btn{
-  margin-left: 245px;
-  opacity: 0;
-  visibility: hidden;
+
+
+.user-menu {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 1000;
+  transition: right 0.3s ease;
 }
 
-#check:checked ~ label #cancel{
-  margin-left: 245px;
-  opacity: 1;
-  visibility: visible;
+.user-menu span {
+  font-size: 20px;
+  cursor: pointer;
 }
 
-@media(max-width : 860px){
-
-  .sidebar{
-    height: auto;
-    width: 70px;
-    left: 0;
-    margin: 100px 0;
-  }
-
-  header,#btn,#cancel{
-    display: none;
-  }
-  
-  span{
-    position: absolute;
-    margin-left: 23px;
-    opacity: 0;
-    visibility: hidden;
-  }
-  
-  .sidebar .link-sidebar{
-    height: 60px;
-  }
-  
-  .sidebar .link-sidebar i{
-    margin-left: -10px;
-  }
-  
-  .link-sidebar:hover {
-    width: 200px;
-    background: inherit;
-  }
-  
-  .sidebar .link-sidebar:hover span{
-    opacity: 1;
-    visibility: visible;
-  }
-
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  right: 0;
+  top: 30px;
+  min-width: 150px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 999;
 }
 
-.sidebar > .link-sidebar.active,.sidebar > .link-sidebar:hover {
-  --accent-color: #32d7fd;
-  --gradient-color: #006bdc;
+.dropdown-content a {
+  font-size: 18px;
+  padding: 10px 15px;
+  display: block;
+  text-decoration: none;
+  color: #000;
 }
-/*Fim do  sidebar*/
+
+.dropdown-content a:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+/* Conteúdo */
+.content {
+  padding: 80px 20px 20px 20px;
+  color: #e9e8e8;
+  transition: margin-left 0.3s ease;
+}
+
+
+/* Quando o menu está aberto */
+.shifted {
+  margin-left: 240px;
+}
+
+/* Responsividade futura (manter desativada por enquanto) */
+@media (max-width: 860px) {
+  /* ativar depois se quiser responsivo */
+}
+

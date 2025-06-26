@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from obra.models import obra
 from agenda.forms import AgendamentoForm
+from agenda.models import Agendamento
 from django.utils.timezone import now
 
 
@@ -28,3 +29,11 @@ def novo_agendamento(request, id=None):
         form = AgendamentoForm(initial={'obra': obra_selecionada})
 
     return render(request, 'agenda/novo_agendamento.html', {'form': form})
+
+@login_required
+def listar_agendamentos(request):
+    agendamentos = Agendamento.objects.select_related('obra').order_by('data_agendamento')
+
+    return render(request, 'agenda/listar_agendamentos.html', {
+        'agendamentos': agendamentos
+    })

@@ -5,62 +5,56 @@
     <meta charset="UTF-8">
     <title>{% block title %}Equipe Nobre{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 </head>
 <body>
 
-<link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
-
-<!--Sidebar-->
-<input type="checkbox" id="check">
-
-<label for="check">
-  <i class="fas fa-bars" id="btn"></i>
-  <i class="fas fa-times" id="cancel"></i>
-</label>
-
-<div class="sidebar">
-  
-  <header>Menu</header>
-      {% load static %}
-  <link rel="stylesheet" href="{% static 'TelaPrincipal/telaprincipal.css' %}">
-    <a href="{% url 'PaginaPrincipal:pagina_inicial' %}" class="link-sidebar active">
-      <i class="fas fa-qrcode"></i>
-      <span>Pagina Inicial</span>
-    </a>
-    
-    <a href="{% url 'agenda:novo_agendamento' %}" class="link-sidebar">
-      <i class="fas fa-calendar-days"></i>
-      <span>Agenda</span>
-    </a>
-  
-    <a href="{% url 'obra:cadastrar_obra' %}" class="link-sidebar">
-       <i class="fas fa-edit"></i>
-      <span>Obras</span>
-    </a>
-
-    <a href="#" class="link-sidebar">
-      <i class="far fa-question-circle"></i>
-      <span>Usuarios</span>
-    </a>
-    
-    <a href="#" class="link-sidebar">
-      <i class="fas fa-sliders-h"></i>
-      <span>Serviços</span>
-    </a>
-    
-    <a href="#" class="link-sidebar">
-      <i class="far fa-envelope"></i>
-      <span>Contato</span>
-    </a>
-
-</div>
-<!--Fim Sidebar-->
-
-<div class="content">
-    {% block content %}
-    {% endblock %}
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <i class="fas fa-bars" id="openSidebar"></i>
   </div>
+  <div class="nameuser">
+    <span class="user-name">Bem-vindo, {{ user.first_name }}</span>
+  </div>
+  <div class="topbar-right">
+    <div class="user-menu">
+      <span id="userButton">Usuário ▾</span>
+      <div id="userDropdown" class="dropdown-content">
+        <a href="{% url 'alterar_senha' %}">Alterar senha</a>
+        <a href="{% url 'logout' %}">Sair</a>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar"> 
+  <header>Menu</header>
+  <a href="{% url 'PaginaPrincipal:pagina_inicial' %}" 
+    class="link-sidebar {% if request.resolver_match.url_name == 'pagina_inicial' %}active{% endif %}">
+    <i class="fas fa-qrcode"></i><span>Pagina Inicial</span>
+  </a>
+  <a href="{% url 'agenda:novo_agendamento' %}" 
+    class="link-sidebar {% if request.resolver_match.url_name == 'novo_agendamento' %}active{% endif %}">
+    <i class="fas fa-calendar-days"></i><span>Agenda</span>
+  </a>
+  <a href="{% url 'obra:cadastrar_obra' %}" 
+    class="link-sidebar {% if request.resolver_match.url_name == 'cadastrar_obra' %}active{% endif %}">
+    <i class="fas fa-edit"></i><span>Obras</span>
+  </a>
+  <a href="#"><i class="far fa-question-circle"></i><span>Usuários</span></a>
+  <a href="#"><i class="fas fa-sliders-h"></i><span>Serviços</span></a>
+  <a href="#"><i class="far fa-envelope"></i><span>Contato</span></a>
+</div>
+
+<!-- Conteúdo principal -->
+<div class="content" id="content">
+  {% block content %}
+  {% endblock %}
+</div>
+
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

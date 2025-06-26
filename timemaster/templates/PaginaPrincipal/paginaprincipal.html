@@ -4,45 +4,63 @@
 {% block title %}Página Inicial - TimeMaster{% endblock %}
 
 {% block content %}
-
-
-<!--Inicio da tela principal-->
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'TelaPrincipal/home.css' %}">
+{% endblock %}
 <div class="main-container">
+  <!-- 🔹 ESTATÍSTICAS COMO CARDS -->
+  <div class="dashboard-cards">
+    <div class="card total">
+      <h3>Total de Obras em aberto</h3>
+      <p class="card-number">{{ obras_nao_realizadas|length }}</p>
+    </div>
 
+    <div class="card com-agendamento">
+      <h3>Com Agendamento</h3>
+      <p class="card-number">{{ obras_com_agendamento|length }}</p>
+      <div class="card-actions">
+        <a href="{% url 'agenda:listar' %}?agendadas=1" title="Ver lista">
+          <i class="fas fa-list"></i>
+        </a>
+        <a href="{% url 'agenda:listar' %}" title="Ver agenda">
+          <i class="fas fa-calendar-alt"></i>
+        </a>
+      </div>
+    </div>
 
-  <div class="top-bar">
-    <span class="welcome">Bem-vindo, {{ user.first_name }}</span>
-    <a href="{% url 'logout' %}" class="logout-link">
-      <i class="fas fa-sign-out-alt"></i>Logout</a>
+    <div class="card sem-agendamento">
+      <h3>Sem Agendamento</h3>
+      <p class="card-number">{{ obras_sem_previsao|length }}</p>
+      <div class="card-actions">
+        <a href="{% url 'agenda:listar' %}?agendadas=0" title="Ver lista">
+          <i class="fas fa-list"></i>
+        </a>
+      </div>
+    </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
+  <!-- CONTEÚDO PRINCIPAL ANTIGO -->
   <div class="pagina_inicial-content">
-    
-    <!-- COLUNA CIMA -->
-<div class="left-panel">
-  <h2>Obras Pendentes</h2>
-  <ul class="obra-list">
-    {% for obra in obras_sem_previsao %}
-      <li class="obra-item">
-        <div class="obra-info">
-          <span class="obra-nome">{{ obra.nome }}</span>
-          <span class="obra-cliente">{{ obra.cliente }}</span>
-          <span class="badge badge-warning">Sem data de entrega</span>
-        </div>
-        <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
-      </li>
-    {% empty %}
-      <li class="nenhuma-obra">Nenhuma obra pendente sem data de entrega.</li>
-    {% endfor %}
-  </ul>
-</div>
 
+    <div class="left-panel">
+      <h2>Obras Pendentes</h2>
+      <ul class="obra-list">
+        {% for obra in obras_sem_previsao %}
+        <li class="obra-item">
+          <div class="obra-info">
+            <span class="obra-nome">{{ obra.nome }}</span>
+            <span class="obra-cliente">{{ obra.cliente }}</span>
+            <span class="badge badge-warning">Sem data de entrega</span>
+          </div>
+          <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
+        </li>
+        {% empty %}
+        <li class="nenhuma-obra">Nenhuma obra pendente sem data de entrega.</li>
+        {% endfor %}
+      </ul>
+    </div>
 
-    <!-- COLUNA BAIXO -->
     <div class="right-panel">
-      
-      <!-- AGENDAMENTOS DE HOJE -->
       <div class="agendamentos-hoje">
         <h2>Entregas para</h2>
         <form method="get" action="{% url 'PaginaPrincipal:pagina_inicial' %}" class="data-form">
@@ -52,44 +70,30 @@
 
         <ul class="lista-agendamentos">
           {% for agendamento in agendamentos %}
-            <li>
-              {{ agendamento.obra }}
-              <span class="cor" ></span>
-            </li>
+          <li>
+            {{ agendamento.obra }}
+            <span class="cor"></span>
+          </li>
           {% empty %}
-            <li>Sem agendamentos para hoje.</li>
+          <li>Sem agendamentos para hoje.</li>
           {% endfor %}
         </ul>
       </div>
 
-      <!-- AGENDA DA SEMANA -->
       <div class="agenda-semana">
         <h2>Nessa semana</h2>
         <ul>
           {% for dia, entregas in agenda_semana.items %}
-            {% if entregas %}
-              <li>
-                <strong>{{ dia|date:"d/m" }}</strong>: 
-                {{ entregas|length }} entrega{{ entregas|length|pluralize:"s" }}
-              </li>
-            {% else %}
-              <li><strong>{{ dia|date:"d/m" }}</strong>: Nenhuma entrega</li>
-            {% endif %}
+          {% if entregas %}
+          <li><strong>{{ dia|date:"d/m" }}</strong>: {{ entregas|length }} entrega{{ entregas|length|pluralize:"s" }}</li>
+          {% else %}
+          <li><strong>{{ dia|date:"d/m" }}</strong>: Nenhuma entrega</li>
+          {% endif %}
           {% endfor %}
         </ul>
       </div>
-
-      <!-- ESTATÍSTICAS -->
-      <div class="estatisticas">
-        <h2>Estatísticas de obras agendadas</h2>
-        <ul>
-          <li>Total de Obras em aberto: {{ obras_nao_realizadas|length }}</li>
-          <li>Obras com agendamento: {{ obras_com_agendamento|length }}</li>
-          <li>Obras sem agendamento: {{ obras_sem_previsao|length }}</li>
-        </ul>
-      </div>
-
     </div>
+
   </div>
 </div>
 {% endblock %}
