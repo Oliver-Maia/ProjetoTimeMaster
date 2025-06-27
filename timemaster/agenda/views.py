@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from obra.models import obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
@@ -32,8 +33,22 @@ def novo_agendamento(request, id=None):
 
 @login_required
 def listar_agendamentos(request):
+    nome = request.GET.get('nome', '')
+    data = request.GET.get('data', '')
     agendamentos = Agendamento.objects.select_related('obra').order_by('data_agendamento')
 
-    return render(request, 'agenda/listar_agendamentos.html', {
-        'agendamentos': agendamentos
+    if nome:
+        agendamentos = agendamentos.filter(obra__nome__icontains=nome)
+    
+    if data:
+        agendamentos = agendamentos.filter(data_agendamento__date=data)
+
+    paginator = Paginator(agendamentos, 3)  # Exibe 10 agendamentos por página
+    pagina_num = request.GET.get('page')
+    pagina_obj = paginator.get_page(pagina_num)
+    
+    return render(request, "agenda/listar_agendamentos.html", {
+        "pagina_obj": pagina_obj,
+        "nome": nome,
+        "data": data,
     })

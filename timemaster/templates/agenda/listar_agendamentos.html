@@ -9,40 +9,63 @@
 
 {% block content %}
 <div class="lista-agenda-container">
-  
-  <div class="filtros-tabela">
-    <input type="text" id="filtro-nome" placeholder="Filtrar por nome da obra...">
-    <input type="date" id="filtro-data">
-    <button id="btn-filtrar" class="btn-filtrar">
-        <i class="fas fa-search"></i>
+
+  <!-- FILTROS -->
+  <form method="get" class="filtros-tabela">
+    <input type="text" id="filtro-nome" name="nome" value="{{ nome }}" placeholder="Filtrar por nome da obra...">
+    <input type="date" id="filtro-data" name="data" value="{{ data }}">
+    <button type="submit" id="btn-filtrar" class="btn-filtrar">
+      <i class="fas fa-search"></i>
     </button>
-   </div>
+  </form>
 
+  <!-- TABELA -->
+  <section class="tabela-wrapper">
+    <table class="tabela-agendamentos">
+      <thead>
+        <tr>
+          <th>Nº Obra</th>
+          <th>Nome</th>
+          <th>Endereço</th>
+          <th>Data de Agendamento</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-corpo">
+        {% for agendamento in pagina_obj %}
+          <tr>
+            <td>{{ agendamento.obra.id }}</td>
+            <td>{{ agendamento.obra.nome }}</td>
+            <td>{{ agendamento.obra.endereco }}</td>
+            <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">Nenhum agendamento encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
 
-  <table class="tabela-agendamentos">
-    <thead>
-      <tr>
-        <th>Nº Obra</th>
-        <th>Nome</th>
-        <th>Endereço</th>
-        <th>Data de Agendamento</th>
-      </tr>
-    </thead>
-    <tbody id="tabela-corpo">
-      {% for agendamento in agendamentos %}
-      <tr>
-        <td>{{ agendamento.obra.id }}</td>
-        <td>{{ agendamento.obra.nome }}</td>
-        <td>{{ agendamento.obra.endereco }}</td>
-        <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="4">Nenhum agendamento encontrado.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <!-- PAGINAÇÃO -->
+  <div class="paginacao">
+    {% if pagina_obj.has_previous %}
+      <a href="?page=1&nome={{ nome }}&data={{ data }}">&laquo; Primeira</a>
+      <a href="?page={{ pagina_obj.previous_page_number }}&nome={{ nome }}&data={{ data }}">Anterior</a>
+    {% endif %}
 
-  <button class="botao-novo" id="abrir-modal">+ Agenda</button>
+    <span>Página {{ pagina_obj.number }} de {{ pagina_obj.paginator.num_pages }}</span>
+
+    {% if pagina_obj.has_next %}
+      <a href="?page={{ pagina_obj.next_page_number }}&nome={{ nome }}&data={{ data }}">Próxima</a>
+      <a href="?page={{ pagina_obj.paginator.num_pages }}&nome={{ nome }}&data={{ data }}">Última &raquo;</a>
+    {% endif %}
+  </div>
+
+  <!-- BOTÃO DE NOVO AGENDAMENTO -->
+  <button id="abrir-modal" data-url="{% url 'agenda:novo_agendamento' %}">
+    + Novo Agendamento
+  </button>
 </div>
 
 <!-- MODAL -->
@@ -52,7 +75,6 @@
     <iframe id="form-agendamento" src="{% url 'agenda:novo_agendamento' %}" frameborder="0"></iframe>
   </div>
 </div>
-
 {% endblock %}
 
 {% block extra_js %}
