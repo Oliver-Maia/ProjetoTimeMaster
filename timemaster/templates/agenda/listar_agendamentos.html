@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista de Agendamentos{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'agenda/lista_agenda.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="lista-agenda-container">
+  
+  <div class="filtros-tabela">
+    <input type="text" id="filtro-nome" placeholder="Filtrar por nome da obra...">
+    <input type="date" id="filtro-data">
+    <button id="btn-filtrar" class="btn-filtrar">
+        <i class="fas fa-search"></i>
+    </button>
+   </div>
+
+
+  <table class="tabela-agendamentos">
+    <thead>
+      <tr>
+        <th>Nº Obra</th>
+        <th>Nome</th>
+        <th>Endereço</th>
+        <th>Data de Agendamento</th>
+      </tr>
+    </thead>
+    <tbody id="tabela-corpo">
+      {% for agendamento in agendamentos %}
+      <tr>
+        <td>{{ agendamento.obra.id }}</td>
+        <td>{{ agendamento.obra.nome }}</td>
+        <td>{{ agendamento.obra.endereco }}</td>
+        <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">Nenhum agendamento encontrado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <button class="botao-novo" id="abrir-modal">+ Agenda</button>
+</div>
+
+<!-- MODAL -->
+<div id="modal-agendamento" class="modal">
+  <div class="modal-conteudo">
+    <span class="fechar" id="fechar-modal">&times;</span>
+    <iframe id="form-agendamento" src="{% url 'agenda:novo_agendamento' %}" frameborder="0"></iframe>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'agenda/lista_agenda.js' %}"></script>
+{% endblock %}
