@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+
+
 </head>
 <body>
 
@@ -32,21 +34,27 @@
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar"> 
   <header>Menu</header>
+
   <a href="{% url 'PaginaPrincipal:pagina_inicial' %}" 
     class="link-sidebar {% if request.resolver_match.url_name == 'pagina_inicial' %}active{% endif %}">
     <i class="fas fa-qrcode"></i><span>Pagina Inicial</span>
   </a>
-  <a href="{% url 'agenda:novo_agendamento' %}" 
-    class="link-sidebar {% if request.resolver_match.url_name == 'novo_agendamento' %}active{% endif %}">
+
+<div class="sidebar-item {% if request.resolver_match.url_name == 'novo_agendamento' or request.resolver_match.url_name == 'listar' %}active{% endif %}">
+  <a href="#" class="link-sidebar toggle-submenu {% if request.resolver_match.url_name == 'novo_agendamento' or request.resolver_match.url_name == 'listar' %}active{% endif %}">
     <i class="fas fa-calendar-days"></i><span>Agenda</span>
+  </a>
+  <ul class="submenu">
+    <li><a href="{% url 'agenda:novo_agendamento' %}">Novo Agendamento</a></li>
+    <li><a href="{% url 'agenda:listar' %}">Listar Agendamentos</a></li>
+  </ul>
+</div>
+
   </a>
   <a href="{% url 'obra:cadastrar_obra' %}" 
     class="link-sidebar {% if request.resolver_match.url_name == 'cadastrar_obra' %}active{% endif %}">
     <i class="fas fa-edit"></i><span>Obras</span>
   </a>
-  <a href="#"><i class="far fa-question-circle"></i><span>Usuários</span></a>
-  <a href="#"><i class="fas fa-sliders-h"></i><span>Serviços</span></a>
-  <a href="#"><i class="far fa-envelope"></i><span>Contato</span></a>
 </div>
 
 <!-- Conteúdo principal -->

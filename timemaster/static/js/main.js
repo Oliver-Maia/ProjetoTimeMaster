@@ -1,10 +1,11 @@
 // JavaScript for handling sidebar and user dropdown interactions
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.getElementById('sidebar');
   const content = document.getElementById('content');
   const topbar = document.querySelector('.topbar');
   const openSidebarBtn = document.getElementById('openSidebar');
+  const toggles = document.querySelectorAll('.toggle-submenu');
   const userButton = document.getElementById('userButton');
   const userDropdown = document.getElementById('userDropdown');
 
@@ -32,4 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+  // Toggle submenu visibility
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      const item = this.closest('.sidebar-item');
+      item.classList.toggle('active');
+      });
+  });
 });

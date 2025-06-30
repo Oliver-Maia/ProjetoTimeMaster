@@ -3,11 +3,12 @@
 
 {% block title %}Lista de Agendamentos{% endblock %}
 
+{% block content %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'agenda/lista_agenda.css' %}">
+<link rel="stylesheet" href="{% static 'agenda/listaAgenda.css' %}">
 {% endblock %}
 
-{% block content %}
+
 <div class="lista-agenda-container">
 
   <!-- FILTROS -->
@@ -72,11 +73,14 @@
 <div id="modal-agendamento" class="modal">
   <div class="modal-conteudo">
     <span class="fechar" id="fechar-modal">&times;</span>
-    <iframe id="form-agendamento" src="{% url 'agenda:novo_agendamento' %}" frameborder="0"></iframe>
+    <iframe id="form-agendamento" src="{% url 'agenda:novo_agendamento' %}?modal=1" frameborder="0"></iframe>
   </div>
 </div>
-{% endblock %}
+
+
 
 {% block extra_js %}
-<script src="{% static 'agenda/lista_agenda.js' %}"></script>
+<script src="{% static 'agenda/listaAgenda.js' %}"></script>
+{% endblock %}
+
 {% endblock %}

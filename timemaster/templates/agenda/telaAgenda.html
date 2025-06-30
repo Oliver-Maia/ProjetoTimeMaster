@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Agenda{% endblock %}
+
+{% block content %}
+  <!-- Estilos do calendário -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'agenda/agenda.css' %}">
+
+  <!-- Aqui está o calendário -->
+  <div id="calendar" style="margin: 20px;"></div>
+{% endblock %}
+
+{% block scripts %}
+  <!-- JS do FullCalendar -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
+
+  <!-- Seu JS -->
+  <script src="{% static 'agenda/agenda.js' %}"></script>
+{% endblock %}

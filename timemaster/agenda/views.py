@@ -6,6 +6,7 @@ from obra.models import obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
 from django.utils.timezone import now
+from django.http import JsonResponse
 
 
 
@@ -23,13 +24,16 @@ def novo_agendamento(request, id=None):
             agendamento.montador = request.user.get_full_name() or request.user.username
             agendamento.realizado = False
             agendamento.save()
-            # Atualiza a previsão de entrega da obra associada ao agendamento
             agendamento.obra.previsao_entrega = agendamento.data_agendamento
             agendamento.obra.save()
     else:
         form = AgendamentoForm(initial={'obra': obra_selecionada})
+    if request.GET.get('modal') == '1':
+        template_name = 'agenda/formAgendamento.html'
+    else:
+        template_name = 'agenda/novo_agendamento.html'
 
-    return render(request, 'agenda/novo_agendamento.html', {'form': form})
+    return render(request, template_name, {'form': form})
 
 @login_required
 def listar_agendamentos(request):
@@ -52,3 +56,29 @@ def listar_agendamentos(request):
         "nome": nome,
         "data": data,
     })
+
+@login_required
+def eventos_json(request):
+    eventos = Agendamento.objects.all()
+
+    cores_montador = {
+        'Montador A': '#1abc9c',
+        'Montador B': '#3498db',
+        'Montador C': '#e67e22',
+        # adicione mais montadores conforme necessário
+    }
+
+    data = []
+    for evento in eventos:
+        nome_montador = evento.montador  # já é uma string
+        data.append({
+            'title': f'{evento.obra.nome} - {nome_montador}',
+            'start': evento.data_agendamento.isoformat(),  # usar o campo correto
+            'color': cores_montador.get(nome_montador, '#95a5a6'),  # cor padrão cinza
+        })
+
+    return JsonResponse(data, safe=False)
+
+@login_required
+def tela_agenda(request):
+    return render(request, 'agenda/telaAgenda.html')

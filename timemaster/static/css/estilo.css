@@ -58,6 +58,41 @@
   color: #fff;
   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
 }
+/* Submenu - fechado por padrão */
+.sidebar-item .submenu {
+  display: none;
+  padding-left: 20px;
+  margin: 0;
+  background-color: #2b2b2b;
+  list-style: none;
+  transition: max-height 0.3s ease;
+}
+
+/* Submenu visível ao ativar */
+.sidebar-item.active .submenu {
+  display: block;
+}
+
+/* Estilo dos links do submenu */
+.submenu li {
+  list-style: none;
+}
+
+.submenu li a {
+  display: block;
+  padding: 10px 30px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.submenu li a:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+}
+
+
 
 /* Topbar */
 .topbar {

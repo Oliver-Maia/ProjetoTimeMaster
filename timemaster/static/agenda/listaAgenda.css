@@ -1,13 +1,9 @@
+
 .lista-agenda-container {
-  max-width: 900px;
   margin: 40px auto;
   background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   padding: 20px;
-  z-index: auto;
-  position: relative;
-  border-radius: 10px;
+  width: 95%;
 }
 
 .filtros-tabela {
@@ -39,7 +35,7 @@
 
 .tabela-agendamentos {
   width: 100%;
-  border-collapse: collapse;
+  border: 1px solid #000000;
 }
 
 .tabela-wrapper {
@@ -51,13 +47,14 @@
 
 .tabela-agendamentos th,
 .tabela-agendamentos td {
-  border: 1px solid #000000;
-  padding: 12px;
+  padding: 12px; /* Readiciona o padding */
+  border: 1px solid #000000; /* Define suas bordas */
   text-align: left;
 }
 
 .tabela-agendamentos thead {
   background-color: #000000;
+  color: white;
 }
 
 .botao-novo {

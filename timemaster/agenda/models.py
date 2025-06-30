@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from obra.models import obra
 from usuario.models import usuario
@@ -17,7 +18,8 @@ class agenda(models.Model):
 class Agendamento(models.Model):
     obra = models.ForeignKey(obra, on_delete=models.CASCADE, related_name='agendamentos')
     data = models.DateTimeField(auto_now_add=True)
-    montador = models.CharField(max_length=100)  
+    # montador = models.CharField(max_length=100)  # ANTIGO (vai sair depois)
+    montador = models.ForeignKey(usuario, on_delete=models.CASCADE)
     data_agendamento = models.DateTimeField()
     realizado = models.BooleanField(default=False)
 

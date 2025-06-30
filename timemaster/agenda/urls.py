@@ -9,5 +9,8 @@ urlpatterns = [
     path('adicionar/<int:id>/', views.novo_agendamento, name='agenda_adicionar_com_obra'),
     path('novo/', views.novo_agendamento, name='novo_agendamento'),
     path('lista/', views.listar_agendamentos, name='listar'),
+    path('agenda/', views.listar_agendamentos, name='agenda'),
+    path('eventos/', views.eventos_json, name='eventos_json'),
+    path('Agenda/', views.tela_agenda, name='nova_agenda'),
     path('', include('PaginaPrincipal.urls')),
 ]
