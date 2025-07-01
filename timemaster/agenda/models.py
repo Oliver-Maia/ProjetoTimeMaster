@@ -16,15 +16,23 @@ class agenda(models.Model):
         return self.obra
 
 class Agendamento(models.Model):
-    obra = models.ForeignKey(obra, on_delete=models.CASCADE, related_name='agendamentos')
-    data = models.DateTimeField(auto_now_add=True)
-    # montador = models.CharField(max_length=100)  # ANTIGO (vai sair depois)
-    montador = models.ForeignKey(usuario, on_delete=models.CASCADE)
-    data_agendamento = models.DateTimeField()
-    realizado = models.BooleanField(default=False)
+    obra = models.ForeignKey('obra.Obra', on_delete=models.CASCADE, related_name='agendamentos', verbose_name='Obra relacionada')
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
+    montador = models.ForeignKey('usuario.Usuario', on_delete=models.SET_NULL, null=True, blank=False, verbose_name='Montador Responsável', limit_choices_to={'cargo__nome' :'Montador', 'ativo': True})
+    data_agendamento = models.DateTimeField(verbose_name='Data de Agendamento')
+    realizado = models.BooleanField(default=False, verbose_name='Agendamento Realizado?')
 
+    class Meta:
+        verbose_name = 'Agendamento'
+        verbose_name_plural = 'Agendamentos'
+        ordering = ['-data_agendamento']
+        constraints = [
+            models.UniqueConstraint(fields=['montador', 'data_agendamento'], name='unique_montador_agendamento',
+                violation_error_message='Esse montador ja tem um agendamento para esse horario.')
+        ]
 
     def __str__(self):
-        return f"{self.obra.nome} - {self.data} ({self.montador})"
+        montador_nome = str(self.montador) if self.montador else 'Não designado'
+        return f"{self.obra.nome} - {self.data_agendamento.strftime('$d/%m/%y %H:%M')} ({montador_nome})"
 
-
+    

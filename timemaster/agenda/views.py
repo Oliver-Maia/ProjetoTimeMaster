@@ -21,7 +21,7 @@ def novo_agendamento(request, id=None):
         if form.is_valid():
             agendamento = form.save(commit=False)
             agendamento.data = now()
-            agendamento.montador = request.user.get_full_name() or request.user.username
+            agendamento.montador = request.POST.get('montador', None)
             agendamento.realizado = False
             agendamento.save()
             agendamento.obra.previsao_entrega = agendamento.data_agendamento
@@ -40,6 +40,7 @@ def listar_agendamentos(request):
     nome = request.GET.get('nome', '')
     data = request.GET.get('data', '')
     agendamentos = Agendamento.objects.select_related('obra').order_by('data_agendamento')
+    montador_nome = request.GET.get('montador', '')
 
     if nome:
         agendamentos = agendamentos.filter(obra__nome__icontains=nome)
@@ -55,6 +56,7 @@ def listar_agendamentos(request):
         "pagina_obj": pagina_obj,
         "nome": nome,
         "data": data,
+        'montador': montador_nome,
     })
 
 @login_required

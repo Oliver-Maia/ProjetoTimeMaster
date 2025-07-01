@@ -23,7 +23,7 @@ def criar_obras():
             'endereco': 'Rua Educação, 100',
             'data_criacao': datetime.now(),
             'cliente': 'Governo do Estado',
-            'previsao_entrega': datetime.now() + timedelta(days=180) },
+            'previsao_entrega': datetime.now() + timedelta(days=60) },
 
         {
             'nome': 'Shopping Center',
@@ -39,7 +39,7 @@ def criar_obras():
             'endereco': 'Praça da Liberdade, s/n',
             'data_criacao': datetime.now(),
             'cliente': 'Prefeitura Municipal',
-            'previsao_entrega': datetime.now() + timedelta(days=90) },    
+            'previsao_entrega': datetime.now() + timedelta(days=15) },    
     ]
     
     for dados in dados_obra:

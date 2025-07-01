@@ -29,6 +29,7 @@
           <th>Nome</th>
           <th>Endereço</th>
           <th>Data de Agendamento</th>
+          <th>Montador</th>
         </tr>
       </thead>
       <tbody id="tabela-corpo">
@@ -38,6 +39,7 @@
             <td>{{ agendamento.obra.nome }}</td>
             <td>{{ agendamento.obra.endereco }}</td>
             <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
+            <td>{{ agendamento.montador.get_full_name }}</td>
           </tr>
         {% empty %}
           <tr>
