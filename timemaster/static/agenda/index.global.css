@@ -1,0 +1,123 @@
+/*! FullCalendar v6.1.18 - MIT License */
+ .fc{
+    direction:ltr;
+    text-align:left
+}
+.fc .fc-event{
+    position:relative;
+    display:block;
+    font-size:.85em;
+    line-height:1.3;
+    border-radius:3px;
+    border:1px solid #3a87ad;
+    background-color:#3a87ad;
+    color:#fff;
+    margin:1px 0;
+    padding:0 1px
+}
+.fc .fc-event:hover{
+    text-decoration:none
+}
+.fc .fc-event .fc-content{
+    padding:2px 4px
+}
+.fc .fc-event .fc-title{
+    font-weight:700
+}
+.fc .fc-event .fc-time,.fc .fc-event .fc-title{
+    display:inline-block;
+    white-space:nowrap
+}
+.fc .fc-event .fc-time{
+    font-size:.9em;
+    font-weight:700
+}
+.fc .fc-toolbar{
+    padding:10px 0
+}
+.fc .fc-toolbar h2{
+    margin:0;
+    font-size:1.75em
+}
+.fc .fc-toolbar .fc-left,.fc .fc-toolbar .fc-center,.fc .fc-toolbar .fc-right{
+    display:inline-block;
+    vertical-align:middle
+}
+.fc .fc-toolbar .fc-left{
+    float:left
+}
+.fc .fc-toolbar .fc-right{
+    float:right
+}
+.fc .fc-toolbar .fc-center{
+    text-align:center
+}
+.fc .fc-button{
+    display:inline-block;
+    margin:0;
+    padding:.5em 1em;
+    border:1px solid #ccc;
+    border-radius:3px;
+    background-color:#f5f5f5;
+    color:#000;
+    text-align:center;
+    text-decoration:none;
+    cursor:pointer
+}
+.fc .fc-button:hover,.fc .fc-button:focus{
+    background-color:#e6e6e6;
+    text-decoration:none
+}
+.fc .fc-button.fc-state-active,.fc .fc-button:active{
+    background-color:#ccc;
+    border-color:#adadad;
+    color:#000
+}
+.fc .fc-button.fc-state-disabled{
+    cursor:default;
+    opacity:.65;
+    background-image:none
+}
+.fc .fc-button-group{
+    display:inline-block
+}
+.fc .fc-button-group>.fc-button{
+    float:left;
+    margin:0 -1px 0 0
+}
+.fc .fc-button-group>.fc-button:first-child{
+    border-top-left-radius:3px;
+    border-bottom-left-radius:3px
+}
+.fc .fc-button-group>.fc-button:last-child{
+    border-top-right-radius:3px;
+    border-bottom-right-radius:3px
+}
+.fc .fc-event-dot{
+    display:inline-block;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin:0 4px;
+    vertical-align:middle
+}
+.fc .fc-daygrid-day-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center
+}
+.fc .fc-daygrid-day-events{
+    margin-top:2px
+}
+.fc .fc-daygrid-event{
+    margin-bottom:2px
+}
+.fc .fc-daygrid-more-link{
+    display:inline-block;
+    font-size:.85em;
+    margin-top:2px
+}
+.fc .fc-scrollgrid-section-header .fc-scroller,.fc .fc-scrollgrid-section-body .fc-scroller{
+    overflow:hidden!important
+}
+ 

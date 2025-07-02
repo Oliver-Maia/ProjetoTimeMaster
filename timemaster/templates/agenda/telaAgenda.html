@@ -2,19 +2,22 @@
 {% load static %}
 
 {% block title %}Agenda{% endblock %}
-{% block content %}
+
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'agenda/agenda.css' %}">
+<link rel="stylesheet" href="{% static 'agenda/index.global.css' %}">
 {% endblock %}
 
-
+{% block content %}
 <div class="calendar">
   <div id="calendar"></div>
 </div>
 {% endblock %}
 
 
-{% block extra_js %}
-<script src="{% static 'agenda:index.global.min.js' %}"></script>
+{% block scripts %}
+<script src="{% static 'agenda/index.global.js' %}"></script>
+<script src="{% static 'agenda/locales_pt-br.js' %}"></script>
 <script src="{% static 'agenda/agenda.js' %}"></script>
 {% endblock %}

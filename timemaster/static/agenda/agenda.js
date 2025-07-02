@@ -1,39 +1,24 @@
+
 document.addEventListener('DOMContentLoaded', function() {
   const calendarEl = document.getElementById('calendar');  
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    locale: 'pt-br',
+  var calendar = new FullCalendar.Calendar(calendarEl, {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
     },
-    events: {
-      url: '/eventos/',
-      failure: function() {
-        alert('Erro ao carregar eventos!');
-      }
-    },
-    eventClick: function(info) {
-      // Exemplo: abrir modal com detalhes
-      const event = info.event;
-      const extendedProps = event.extendedProps;
-      
-      alert(`
-        Obra: ${event.title}\n
-        Data: ${event.start.toLocaleString()}\n
-        ID Agendamento: ${extendedProps.agendamento_id}
-      `);
-
-    },
-    eventTimeFormat: {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
-    },
-    navLinks: true,
+    initialView: 'dayGridMonth',
+    height: '100%',
+    slotMinTime: '08:00',
+    slotMaxTime: '20:00',
+    locale: 'pt-br',
+    initialDate: '2023-01-12',
+    navLinks: true, 
     editable: true,
-    dayMaxEvents: true
+    selectable: true,
+    nowIndicator: true,
+    events: '/agenda/eventos/',
+
   });
 
   calendar.render();
