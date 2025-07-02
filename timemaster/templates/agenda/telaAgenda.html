@@ -2,20 +2,19 @@
 {% load static %}
 
 {% block title %}Agenda{% endblock %}
-
 {% block content %}
-  <!-- Estilos do calendário -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'agenda/agenda.css' %}">
-
-  <!-- Aqui está o calendário -->
-  <div id="calendar" style="margin: 20px;"></div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'agenda/agenda.css' %}">
 {% endblock %}
 
-{% block scripts %}
-  <!-- JS do FullCalendar -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.js"></script>
 
-  <!-- Seu JS -->
-  <script src="{% static 'agenda/agenda.js' %}"></script>
+<div class="calendar">
+  <div id="calendar"></div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'agenda:index.global.min.js' %}"></script>
+<script src="{% static 'agenda/agenda.js' %}"></script>
 {% endblock %}

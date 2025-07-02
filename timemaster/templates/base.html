@@ -59,10 +59,10 @@
 
 <!-- Conteúdo principal -->
 <div class="content" id="content">
-  {% block content %}
-  {% endblock %}
+  {% block content %}{% endblock %}
 </div>
 
 <script src="{% static 'js/main.js' %}"></script>
+{% block scripts %}{% endblock %} 
 </body>
 </html>

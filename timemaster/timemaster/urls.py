@@ -10,7 +10,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", views.telalogin.as_view(), name ="login"),
     path('obras/', include('obra.urls')),
-    path('agenda/', include(('agenda.urls', 'agenda'), namespace='agenda')),
+    path('agenda/', include('agenda.urls')),
     path('pagina_inicial/', include('PaginaPrincipal.urls')),
     path('__reload__/', include('django_browser_reload.urls')),
     path('logout/', LogoutView.as_view(), name='logout'),

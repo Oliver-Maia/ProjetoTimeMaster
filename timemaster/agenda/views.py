@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
 from django.core.paginator import Paginator
 from obra.models import obra
 from agenda.forms import AgendamentoForm
@@ -61,22 +62,21 @@ def listar_agendamentos(request):
 
 @login_required
 def eventos_json(request):
-    eventos = Agendamento.objects.all()
+    eventos = Agendamento.objects.select_related('obra').all()
 
-    cores_montador = {
+    cores = {
         'Montador A': '#1abc9c',
         'Montador B': '#3498db',
         'Montador C': '#e67e22',
-        # adicione mais montadores conforme necessário
     }
 
     data = []
     for evento in eventos:
-        nome_montador = evento.montador  # já é uma string
         data.append({
-            'title': f'{evento.obra.nome} - {nome_montador}',
-            'start': evento.data_agendamento.isoformat(),  # usar o campo correto
-            'color': cores_montador.get(nome_montador, '#95a5a6'),  # cor padrão cinza
+            'title': f'{evento.obra.nome} - {evento.montador}',
+            'start': evento.data_agendamento.isoformat(),
+            'end': (evento.data_agendamento + timedelta(hours=2)).isoformat(),
+            'color': cores.get(evento.montador, '#7f8c8d'),
         })
 
     return JsonResponse(data, safe=False)
