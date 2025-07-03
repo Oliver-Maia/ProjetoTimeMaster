@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     slotMinTime: '08:00',
     slotMaxTime: '20:00',
     locale: 'pt-br',
-    initialDate: '2023-01-12',
+    initialDate: '2025-07-01',
     navLinks: true, 
     editable: true,
     selectable: true,

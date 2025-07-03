@@ -6,7 +6,6 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'agenda/agenda.css' %}">
-<link rel="stylesheet" href="{% static 'agenda/index.global.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -17,7 +16,11 @@
 
 
 {% block scripts %}
-<script src="{% static 'agenda/index.global.js' %}"></script>
-<script src="{% static 'agenda/locales_pt-br.js' %}"></script>
+<script src="{% static 'agenda/core/index.global.min.js' %}"></script>
+<script src="{% static 'agenda/daygrid/index.global.min.js' %}"></script>
+<script src="{% static 'agenda/timegrid/index.global.min.js' %}"></script>
+<script src="{% static 'agenda/list/index.global.min.js' %}"></script>
+<script src="{% static 'agenda/interaction/index.global.min.js' %}"></script> {# Necessário para editable, selectable, navLinks #}
+<script src="{% static 'agenda/locales/pt-br.global.min.js' %}"></script> 
 <script src="{% static 'agenda/agenda.js' %}"></script>
 {% endblock %}

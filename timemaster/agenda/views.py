@@ -60,6 +60,9 @@ def listar_agendamentos(request):
         'montador': montador_nome,
     })
 
+# agenda/views.py
+from datetime import timedelta
+
 @login_required
 def eventos_json(request):
     eventos = Agendamento.objects.select_related('obra').all()
@@ -72,12 +75,25 @@ def eventos_json(request):
 
     data = []
     for evento in eventos:
-        data.append({
+        event_dict = {
             'title': f'{evento.obra.nome} - {evento.montador}',
             'start': evento.data_agendamento.isoformat(),
-            'end': (evento.data_agendamento + timedelta(hours=2)).isoformat(),
             'color': cores.get(evento.montador, '#7f8c8d'),
-        })
+        }
+
+        # Se o evento é para ser de dia inteiro, podemos explicitá-lo
+        # E, para eventos all-day, o 'end' é exclusivo (dia seguinte 00:00:00)
+        if evento.data_agendamento.hour == 0 and \
+           evento.data_agendamento.minute == 0 and \
+           evento.data_agendamento.second == 0:
+            event_dict['allDay'] = True
+            # Para um evento allDay que ocorre no dia X, o 'end' deve ser X + 1 dia
+            event_dict['end'] = (evento.data_agendamento + timedelta(days=1)).isoformat()
+        else:
+            # Se não for 00:00:00, use seu cálculo de duração padrão
+            event_dict['end'] = (evento.data_agendamento + timedelta(hours=2)).isoformat()
+
+        data.append(event_dict)
 
     return JsonResponse(data, safe=False)
 
