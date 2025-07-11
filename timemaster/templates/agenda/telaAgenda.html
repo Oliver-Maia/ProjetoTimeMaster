@@ -9,8 +9,18 @@
 {% endblock %}
 
 {% block content %}
-<div class="calendar">
+<div class="calendar-container">
   <div id="calendar"></div>
+</div>
+<!-- Modal -->
+<div id="eventoModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <h2 id="modalTitulo"></h2>
+    <p><strong>Data:</strong> <span id="modalData"></span></p>
+    <p><strong>Montador:</strong> <span id="modalMontador"></span></p>
+    <p><strong>Obra:</strong> <span id="modalObra"></span></p>
+  </div>
 </div>
 {% endblock %}
 

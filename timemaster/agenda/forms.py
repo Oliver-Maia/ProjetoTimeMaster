@@ -8,8 +8,8 @@ class AgendamentoForm(forms.ModelForm):
         model = Agendamento
         fields = ['obra', 'data_agendamento', 'montador']  # Somente a obra será selecionada pelo usuário
         widgets = {
-            'data_agendamento': forms.DateInput(attrs={'type': 'date'}),
-        }
+            'data_agendamento': forms.DateTimeInput(attrs={'type': 'datetime-local'},
+        )}
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['obra'].queryset = obra.objects.filter(

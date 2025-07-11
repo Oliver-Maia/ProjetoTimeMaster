@@ -3,6 +3,12 @@
   --gradient-color: #0d32d8;
 }
 
+html, body {
+    height: 100%; /* Faz com que html e body ocupem 100% da altura da tela */
+    margin: 0;
+    padding: 0;
+}
+
 /* Sidebar */
 .sidebar {
   position: fixed;
@@ -167,13 +173,14 @@
 /* Conteúdo */
 .content {
   position: absolute;
-  top: 62px; /* altura da topbar */
-  left: 10px; /* margem esquerda */
-  right: 10px; /* margem direita */
-  bottom: 0;
+  top: 62px; 
+  left: 10px; 
+  right: 10px; 
+  bottom: 05px; 
   background-color: #e0e0e0;
-  overflow-y: auto;
+  overflow-y: hidden; /* Evita rolagem vertical, incluso devido a tela agenda */
   transition: padding-left 0.3s ease;
+  border-radius:  0px 0px 11px 11px;
 }
 
 

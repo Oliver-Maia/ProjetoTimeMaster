@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from datetime import timedelta
 from django.core.paginator import Paginator
 from obra.models import obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
+from usuario.models import usuario  
 from django.utils.timezone import now
 from django.http import JsonResponse
 
@@ -22,17 +22,18 @@ def novo_agendamento(request, id=None):
         if form.is_valid():
             agendamento = form.save(commit=False)
             agendamento.data = now()
-            agendamento.montador = request.POST.get('montador', None)
+            
+            agendamento.montador = form.cleaned_data['montador']
+            
             agendamento.realizado = False
             agendamento.save()
             agendamento.obra.previsao_entrega = agendamento.data_agendamento
             agendamento.obra.save()
+
     else:
         form = AgendamentoForm(initial={'obra': obra_selecionada})
-    if request.GET.get('modal') == '1':
-        template_name = 'agenda/formAgendamento.html'
-    else:
-        template_name = 'agenda/novo_agendamento.html'
+
+    template_name = 'agenda/formAgendamento.html' if request.GET.get('modal') == '1' else 'agenda/novo_agendamento.html'
 
     return render(request, template_name, {'form': form})
 
