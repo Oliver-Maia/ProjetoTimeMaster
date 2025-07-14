@@ -32,21 +32,18 @@
 
 .left-panel,
 .right-panel {
-  background: #000000;
   padding: 20px;
   border-radius: 8px;
 }
 
 .left-panel {
-  flex: 1 1 60%;
-  min-width: 300px;
+  flex: 1 1 30%;
   background: #e9e8e8;
   padding: 20px;
   border-radius: 8px;
 }
 .right-panel {
-  flex: 1 1 35%;
-  min-width: 300px;
+  flex: 1 1 30%;
   background: #e9e8e8;
   padding: 20px;
   border-radius: 8px;

@@ -35,7 +35,7 @@
 }
 
 .btn-primary {
-  background-color: #4CAF50;
+  background-color: #0011ff;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -44,14 +44,14 @@
 }
 
 .btn-primary:hover {
-  background-color: #45a049;
+  background-color: #ff9100;
 }
 
 /* Estilo da tabela de obras */
 .obra-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .obra-table th, 

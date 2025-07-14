@@ -1,46 +1,66 @@
+/* Estilos base */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Lato', sans-serif;
   background-color: #f8f9fa;
   color: #333;
+  line-height: 1.6;
 }
 
-.form-container {
-  max-width: 500px;
+.agendamento-container {
+  max-width: 1000px;
   margin: 30px auto;
-  padding: 30px;
+  padding: 0 20px;
+}
+
+h2 {
+  color: #2c3e50;
+
+}
+
+/* Formulário */
+.form-container {
   background-color: #ffffff;
+  padding: 20px;
+  padding-top: 5px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.form-group {
+  margin-bottom: 20px;
 }
 
-form label {
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
   font-weight: bold;
-  margin-bottom: 5px;
+  color: #2c3e50;
 }
 
-form input[type="text"],
-form input[type="date"],
-form input[type="datetime-local"],
-form select,
-form textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
-  width: 100%;
   box-sizing: border-box;
+  transition: border-color 0.3s;
 }
 
-form button[type="submit"] {
-  padding: 10px;
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #006bdc;
+  outline: none;
+}
+
+.btn-submit {
+  padding: 12px 20px;
   background-color: #006bdc;
   color: white;
   font-size: 1rem;
@@ -48,8 +68,90 @@ form button[type="submit"] {
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  width: 100%;
 }
 
-form button[type="submit"]:hover {
+.btn-submit:hover {
   background-color: #004f9a;
+}
+
+/* Lista de Agendamentos */
+.agendamentos-list {
+  background-color: #ffffff;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+}
+
+.search-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+#agendamentos-table {
+  width: 100%;
+  background-color: #ffffff;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+#agendamentos-table th,
+#agendamentos-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #2c3e50;
+}
+
+#agendamentos-table th {
+  background-color: #ffffff;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#agendamentos-table tr:hover {
+  background-color: #ececec;
+}
+
+/* Badges de status */
+.status-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.status-badge.pendente {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.realizado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .agendamento-container {
+    padding: 0 15px;
+  }
+  
+  .form-container,
+  .agendamentos-list {
+    padding: 20px;
+  }
+  
+  #agendamentos-table {
+    display: block;
+    overflow-x: auto;
+  }
 }

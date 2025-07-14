@@ -11,6 +11,6 @@ urlpatterns = [
     path('lista/', views.listar_agendamentos, name='listar'),
     path('agenda/', views.listar_agendamentos, name='agenda'),
     path('eventos/', views.eventos_json, name='eventos_json'),
-    path('calendario/', views.tela_agenda, name='nova_agenda'),
+    path('calendario/', views.tela_agenda, name='calendario'),
     path('', include('PaginaPrincipal.urls')),
 ]

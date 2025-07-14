@@ -1,41 +1,71 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now
 from datetime import timedelta
 from django.core.paginator import Paginator
 from obra.models import obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
 from usuario.models import usuario  
-from django.utils.timezone import now
 from django.http import JsonResponse
+from datetime import timedelta
 
 
 
 @login_required
 def novo_agendamento(request, id=None):
+    # Obter obra selecionada se ID for fornecido
     obra_selecionada = None
     if id:
         obra_selecionada = get_object_or_404(obra, id=id)
-
+    
+    # Processar formulário se for POST
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
             agendamento = form.save(commit=False)
-            agendamento.data = now()
-            
-            agendamento.montador = form.cleaned_data['montador']
-            
+            agendamento.data_criacao = now()
             agendamento.realizado = False
             agendamento.save()
-            agendamento.obra.previsao_entrega = agendamento.data_agendamento
-            agendamento.obra.save()
-
+            
+            # Atualizar previsão de entrega e status da obra
+            if agendamento.obra:
+                agendamento.obra.previsao_entrega = agendamento.data_agendamento
+                agendamento.obra.status = 'em_andamento'  # Atualiza status para "Em Andamento"
+                agendamento.obra.save()
+            
+            # Recarregar a página com formulário vazio após salvar
+            return render(request, 'agenda/novo_agendamento.html', {
+                'form': AgendamentoForm(),
+                'agendamentos': Agendamento.objects.all().order_by('-data_agendamento'),
+                'obras_pendentes': obra.objects.filter(status='pendente'),
+                'success_message': 'Agendamento criado com sucesso!'
+            })
     else:
-        form = AgendamentoForm(initial={'obra': obra_selecionada})
-
+        # Inicializar formulário com obra selecionada
+        initial = {'obra': obra_selecionada} if obra_selecionada else {}
+        form = AgendamentoForm(initial=initial)
+    
+    # Verificar se é uma requisição modal
     template_name = 'agenda/formAgendamento.html' if request.GET.get('modal') == '1' else 'agenda/novo_agendamento.html'
-
-    return render(request, template_name, {'form': form})
+    
+    # Obter todos os agendamentos para exibir na tabela
+    agendamentos = Agendamento.objects.all().order_by('-data_agendamento') [:5] # Limitar a 5 agendamentos para exibição inicial
+    
+    # Obter obras filtradas por status
+    status_filter = request.GET.get('status')
+    if status_filter:
+        obras_filtradas = obra.objects.filter(status=status_filter)
+    else:
+        obras_filtradas = obra.objects.filter(status='pendente')  # Default para pendentes
+    
+    return render(request, template_name, {
+        'form': form,
+        'agendamentos': agendamentos,
+        'obras_pendentes': obras_filtradas,  # Agora filtradas por status
+        'obra_selecionada': obra_selecionada,
+        'status_filter': status_filter  # Passa o filtro atual para o template
+    })
 
 @login_required
 def listar_agendamentos(request):
@@ -61,8 +91,6 @@ def listar_agendamentos(request):
         'montador': montador_nome,
     })
 
-# agenda/views.py
-from datetime import timedelta
 
 @login_required
 def eventos_json(request):

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <!-- Abas para os diferentes status -->
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-toggle="tab" href="#pendentes">Pendentes</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#andamento">Em Andamento</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#concluidas">Concluídas</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="tab" href="#canceladas">Canceladas</a>
+    </li>
+  </ul>
+
+  <!-- Conteúdo das abas -->
+  <div class="tab-content">
+    <div id="pendentes" class="tab-pane active">
+      <h3>Obras Pendentes</h3>
+      <table class="table">
+        <!-- Cabeçalho da tabela -->
+        <tbody>
+          {% for obra in obras_pendentes %}
+          <tr>
+            <td>{{ obra.nome }}</td>
+            <td>{{ obra.get_status_display }}</td>
+            <td>
+              <span class="badge badge-warning">Pendente</span>
+            </td>
+            <td>
+              <a href="{% url 'editar_obra' obra.id %}" class="btn btn-sm btn-primary">Editar</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div id="andamento" class="tab-pane">
+      <h3>Obras em Andamento</h3>
+      <!-- Tabela similar para obras em andamento -->
+    </div>
+
+    <div id="concluidas" class="tab-pane">
+      <h3>Obras Concluídas</h3>
+      <!-- Tabela similar para obras concluídas -->
+    </div>
+  </div>
+</div>
+{% endblock %}

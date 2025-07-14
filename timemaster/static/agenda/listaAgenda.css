@@ -135,3 +135,28 @@
   font-weight: bold;
 }
 
+/* Filtros por status */
+.filtros-status {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.status-card {
+  padding: 15px 25px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  font-weight: bold;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.status-card:hover,
+.status-card.active {
+  background-color: #006bdc;
+  color: white;
+  border-color: #004a9c;
+}

@@ -31,4 +31,26 @@ document.addEventListener("DOMContentLoaded", () => {
   window.onclick = e => {
     if (e.target === modal) modal.style.display = "none";
   }
+  // Filtros por status
+  document.querySelectorAll('.status-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const status = card.getAttribute('data-status');
+
+    // Marca visual
+    document.querySelectorAll('.status-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+
+    // Redireciona com o filtro
+    const nome = document.getElementById("filtro-nome").value;
+    const data = document.getElementById("filtro-data").value;
+    const query = new URLSearchParams({
+      nome: nome || "",
+      data: data || "",
+      status: status
+    }).toString();
+    window.location.href = `?${query}`;
+  });
+});
+
+
 });

@@ -178,7 +178,7 @@ html, body {
   right: 10px; 
   bottom: 05px; 
   background-color: #e0e0e0;
-  overflow-y: hidden; /* Evita rolagem vertical, incluso devido a tela agenda */
+  overflow-y: scroll; /* Permite rolagem vertical, necessário para tela agenda */
   transition: padding-left 0.3s ease;
   border-radius:  0px 0px 11px 11px;
 }

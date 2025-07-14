@@ -1,15 +1,85 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Novo Agendamento{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'agenda/formAgendamento.css' %}">
+{% endblock %}
 
 {% block content %}
+<div class="agendamento-container">
+  <h2>{% if obra_selecionada %}Agendar {{ obra_selecionada.nome }}{% else %}{% endif %}</h2>
+  
+  {% if success_message %}
+  <div class="alert alert-success">
+    {{ success_message }}
+  </div>
+  {% endif %}
+  
+  <!-- Formulário de Agendamento -->
   <div class="form-container">
     <h2>Novo Agendamento</h2>
-    <form method="post">
+    <form method="post" id="agendamento-form">
       {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Agendar</button>
+      
+      <div class="form-group">
+        <label for="id_obra">Obra:</label>
+        {{ form.obra }}
+      </div>
+      
+      <div class="form-group">
+        <label for="id_data_agendamento">Data e Hora:</label>
+        {{ form.data_agendamento }}
+      </div>
+      
+      <div class="form-group">
+        <label for="id_montador">Montador:</label>
+        {{ form.montador }}
+      </div>
+      
+      <button type="submit" class="btn-submit">Salvar Agendamento</button>
     </form>
   </div>
+  
+  <!-- Lista de Agendamentos -->
+  <div class="agendamentos-list">
+    <h2>Agendamentos Recentes</h2>
+    
+    <div class="search-container">
+      <input type="text" id="search-agendamentos" placeholder="Filtrar agendamentos...">
+    </div>
+    
+    <table id="agendamentos-table">
+      <thead>
+        <tr>
+          <th>Obra</th>
+          <th>Data</th>
+          <th>Montador</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for agendamento in agendamentos %}
+        <tr>
+          <td>{{ agendamento.obra.nome }}</td>
+          <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
+          <td>{{ agendamento.montador }}</td>
+          <td>
+            <span class="status-badge {% if agendamento.realizado %}realizado{% else %}pendente{% endif %}">
+              {% if agendamento.realizado %}Realizado{% else %}Pendente{% endif %}
+            </span>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">Nenhum agendamento cadastrado</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}  
+
+{% block scripts %}
+<script src="{% static 'agenda/formAgendamento.js' %}"></script>
 {% endblock %}

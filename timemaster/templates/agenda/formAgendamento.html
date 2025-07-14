@@ -1,18 +1,25 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Novo Agendamento</title>
-  <link rel="stylesheet" href="{% static 'agenda/formAgendamento.css' %}">
-</head>
-<body>
-  <div class="form-container">
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Salvar</button>
-    </form>
+<form method="post" id="agendamento-form-modal">
+  {% csrf_token %}
+  
+  <div class="form-group">
+    <label for="id_obra">Obra:</label>
+    {{ form.obra }}
   </div>
-</body>
-</html>
+  
+  <div class="form-group">
+    <label for="id_data_agendamento">Data e Hora:</label>
+    {{ form.data_agendamento }}
+  </div>
+  
+  <div class="form-group">
+    <label for="id_montador">Montador:</label>
+    {{ form.montador }}
+  </div>
+  
+  <div class="form-group">
+    <label for="id_observacoes">Observações:</label>
+    {{ form.observacoes }}
+  </div>
+  
+  <button type="submit" class="btn-submit">Salvar Agendamento</button>
+</form>
