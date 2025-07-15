@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editar/Excluir Obras - TimeMaster{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'obra/editar_excluir_obra.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="obra-container">
+        <h1>Editar/Excluir Obras</h1>
+        
+        <!-- Filtros -->
+        <div class="filtros">
+            <select id="filtro-status">
+                <option value="">Todos os status</option>
+                <option value="pendente">Pendente</option>
+                <option value="em_andamento">Em Andamento</option>
+                <option value="concluida">Concluída</option>
+                <option value="cancelada">Cancelada</option>
+                <option value="excluida">Excluída</option>
+            </select>
+            <button id="btn-filtrar" class="btn-primary">Filtrar</button>
+        </div>
+        
+        <!-- Tabela de obras -->
+        <table class="obra-table">
+            <thead>
+                <tr>
+                    <th>Nome da Obra</th>
+                    <th>Número</th>
+                    <th>Endereço</th>
+                    <th>Status</th>
+                    <th>Data Agendamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="obras-list">
+                {% for obra in obras %}
+                <tr data-id="{{ obra.id }}">
+                    <td>{{ obra.nome }}</td>
+                    <td>{{ obra.numero|default:"-" }}</td>
+                    <td>{{ obra.endereco|default:"-" }}</td>
+                    <td>{{ obra.get_status_display }}</td>
+                    <td>
+                        {% if obra.proximo_agendamento %}
+                            {{ obra.proximo_agendamento.data_agendamento|date:"d/m/Y H:i" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn-action btn-edit" data-id="{{ obra.id }}">Editar</button>
+                        {% if not obra.excluido %}
+                        <button class="btn-action btn-delete" data-id="{{ obra.id }}">Excluir</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Modal de Edição -->
+        <div id="modal-edicao" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Editar Obra</h2>
+                <form id="form-edicao" class="obra-form">
+                    <input type="hidden" id="obra-id">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="numero">Número:</label>
+                        <input type="text" id="numero">
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco">Endereço:</label>
+                        <input type="text" id="endereco">
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status:</label>
+                        <select id="status" required>
+                            <option value="pendente">Pendente</option>
+                            <option value="em_andamento">Em Andamento</option>
+                            <option value="concluida">Concluída</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Modal de Confirmação -->
+        <div id="modal-confirmacao" class="modal">
+            <div class="modal-content">
+                <h2>Confirmar Exclusão</h2>
+                <p>Tem certeza que deseja excluir esta obra?</p>
+                <input type="hidden" id="obra-id-excluir">
+                <div class="modal-buttons">
+                    <button id="btn-confirmar-exclusao" class="btn-danger">Sim, Excluir</button>
+                    <button id="btn-cancelar-exclusao" class="btn-secondary">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'obra/editar_excluir_obra.js' %}"></script>
+{% endblock %}

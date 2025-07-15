@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.db import models
-from obra.models import obra
+from obra.models import Obra
 from usuario.models import usuario
 # Create your models here.
 
 class agenda(models.Model):
-    obra = models.ForeignKey(obra,on_delete=models.CASCADE)
+    obra = models.ForeignKey(Obra,on_delete=models.CASCADE, related_name='agendamentos_secundario')
     entregador = models.ForeignKey(usuario, on_delete=models.CASCADE)
     data_agendamento = models.DateTimeField('Data do Agendamento')
     observacoes = models.TextField('Observacoes', null = True, blank = True)
@@ -16,7 +16,7 @@ class agenda(models.Model):
         return self.obra
 
 class Agendamento(models.Model):
-    obra = models.ForeignKey('obra.Obra', on_delete=models.CASCADE, related_name='agendamentos', verbose_name='Obra relacionada')
+    obra = models.ForeignKey('Obra.Obra', on_delete=models.CASCADE, related_name='agendamentos', verbose_name='Obra relacionada')
     data_criacao = models.DateTimeField(auto_now_add=True, verbose_name='Data de Criação')
     montador = models.ForeignKey('usuario.Usuario', on_delete=models.SET_NULL, null=True, blank=False, verbose_name='Montador Responsável', limit_choices_to={'cargo__nome' :'Montador', 'ativo': True})
     data_agendamento = models.DateTimeField(verbose_name='Data de Agendamento')

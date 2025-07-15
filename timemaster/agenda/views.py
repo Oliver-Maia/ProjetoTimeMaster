@@ -1,20 +1,16 @@
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-from datetime import timedelta
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from datetime import timedelta
 from obra.models import obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
-from usuario.models import usuario  
-from django.http import JsonResponse
-from datetime import timedelta
-
 
 
 @login_required
 def novo_agendamento(request, id=None):
-    # Obter obra selecionada se ID for fornecido
     obra_selecionada = None
     if id:
         obra_selecionada = get_object_or_404(obra, id=id)
@@ -31,8 +27,7 @@ def novo_agendamento(request, id=None):
             # Atualizar previsão de entrega e status da obra
             if agendamento.obra:
                 agendamento.obra.previsao_entrega = agendamento.data_agendamento
-                agendamento.obra.status = 'em_andamento'  # Atualiza status para "Em Andamento"
-                agendamento.obra.save()
+                agendamento.obra.atualizar_status() # Atualiza status da obra após agendamento
             
             # Recarregar a página com formulário vazio após salvar
             return render(request, 'agenda/novo_agendamento.html', {
@@ -57,14 +52,14 @@ def novo_agendamento(request, id=None):
     if status_filter:
         obras_filtradas = obra.objects.filter(status=status_filter)
     else:
-        obras_filtradas = obra.objects.filter(status='pendente')  # Default para pendentes
+        obras_filtradas = obra.objects.filter(status='pendente')  
     
     return render(request, template_name, {
         'form': form,
         'agendamentos': agendamentos,
-        'obras_pendentes': obras_filtradas,  # Agora filtradas por status
+        'obras_pendentes': obras_filtradas,  
         'obra_selecionada': obra_selecionada,
-        'status_filter': status_filter  # Passa o filtro atual para o template
+        'status_filter': status_filter  
     })
 
 @login_required
@@ -90,7 +85,6 @@ def listar_agendamentos(request):
         "data": data,
         'montador': montador_nome,
     })
-
 
 @login_required
 def eventos_json(request):

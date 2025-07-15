@@ -52,13 +52,17 @@
   </ul>
 </div>
 
+<div class="sidebar-item {% if request.resolver_match.url_name == 'cadastrar_obra' or request.resolver_match.url_name == 'lista_obras' %}active{% endif %}">
+  <a href="#" class="link-sidebar toggle-submenu {% if request.resolver_match.url_name == 'cadastrar_obra' or request.resolver_match.url_name == 'lista_obras' %}active{% endif %}">
+    <i class="fas fa-building"></i><span>Obras</span>
   </a>
-  <a href="{% url 'obra:cadastrar_obra' %}" 
-    class="link-sidebar {% if request.resolver_match.url_name == 'cadastrar_obra' %}active{% endif %}">
-    <i class="fas fa-edit"></i><span>Obras</span>
-  </a>
+  <ul class="submenu">
+    <li><a href="{% url 'obra:cadastrar_obra' %}">Cadastrar Obra</a></li>
+    <li><a href="{% url 'obra:lista_obras' %}">Editar/Excluir Obras</a></li>
+    <li><a href="{% url 'obra:lista_obras' %}">Listar Obras</a></li>
+  </ul>
 </div>
-
+</div>
 <!-- Conteúdo principal -->
 <div class="content" id="content">
   {% block content %}{% endblock %}

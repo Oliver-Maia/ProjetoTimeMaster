@@ -7,93 +7,102 @@
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'TelaPrincipal/home.css' %}">
 {% endblock %}
+
 <div class="main-container">
   <!-- 🔹 ESTATÍSTICAS COMO CARDS -->
   <div class="dashboard-cards">
     <div class="card total">
-      <h3>Total de Obras em aberto</h3>
-      <p class="card-number">{{ obras_nao_realizadas|length }}</p>
+      <h3>Total de Obras</h3>
+      <p class="card-number">{{ obras_pendentes.count|add:obras_andamento.count }}</p>
+      <div class="card-details">
+        <span class="badge badge-pendente">{{ obras_pendentes.count }} Pendentes</span>
+        <span class="badge badge-andamento">{{ obras_andamento.count }} Em Andamento</span>
+      </div>
     </div>
 
-    <div class="card com-agendamento">
-      <h3>Com Agendamento</h3>
-      <p class="card-number">{{ obras_com_agendamento|length }}</p>
+    <div class="card andamento">
+      <h3>Obras em Andamento</h3>
+      <p class="card-number">{{ obras_andamento.count }}</p>
       <div class="card-actions">
-        <a href="{% url 'agenda:listar' %}?agendadas=1" title="Ver lista">
+        <a href="{% url  'agenda:listar' %}?status=em_andamento" title="Ver lista">
           <i class="fas fa-list"></i>
-        </a>
-        <a href="{% url 'agenda:calendario' %}" title="Ver agenda">
-          <i class="fas fa-calendar-alt"></i>
         </a>
       </div>
     </div>
 
-    <div class="card sem-agendamento">
-      <h3>Sem Agendamento</h3>
-      <p class="card-number">{{ obras_sem_previsao|length }}</p>
+    <div class="card pendentes">
+      <h3>Obras Pendentes</h3>
+      <p class="card-number">{{ obras_pendentes.count }}</p>
       <div class="card-actions">
-        <a href="{% url 'agenda:listar' %}?agendadas=0" title="Ver lista">
+        <a href="{% url  'agenda:listar' %}?status=pendente" title="Ver lista">
           <i class="fas fa-list"></i>
         </a>
       </div>
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL ANTIGO -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <div class="pagina_inicial-content">
-
-    <div class="left-panel">
-      <h2>Obras Pendentes</h2>
-      <ul class="obra-list">
-        {% for obra in obras_sem_previsao %}
-        <li class="obra-item">
-          <div class="obra-info">
-            <span class="obra-nome">{{ obra.nome }}</span>
-            <span class="obra-cliente">{{ obra.cliente }}</span>
-            <span class="badge badge-warning">Sem data de entrega</span>
-          </div>
-          <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
-        </li>
-        {% empty %}
-        <li class="nenhuma-obra">Nenhuma obra pendente sem data de entrega.</li>
-        {% endfor %}
-      </ul>
+    <!-- PAINEL DE OBRAS PENDENTES (CARROSSEL) -->
+  <div class="left-panel">
+  <h2>Obras Pendentes</h2>
+  <div class="carrossel-container">
+    <button class="carrossel-btn prev" aria-label="Slide anterior">&#10094;</button>
+    
+    <div class="carrossel">
+      {% for obra in obras_pendentes %}
+      <div class="carrossel-item">
+        <div class="obra-info">
+          <h3>{{ obra.nome }}</h3>
+          <p class="obra-cliente">{{ obra.cliente }}</p>
+          <span class="badge badge-pendente">Pendente</span>
+        </div>
+        <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
+      </div>
+      {% empty %}
+      <div class="carrossel-item">
+        <p>Nenhuma obra pendente</p>
+      </div>
+      {% endfor %}
     </div>
+    
+    <button class="carrossel-btn next" aria-label="Próximo slide">&#10095;</button>
+  </div>
+  </div>
 
+    <!-- TIMELINE DOS PRÓXIMOS 5 DIAS -->
     <div class="right-panel">
-      <div class="agendamentos-hoje">
-        <h2>Entregas para</h2>
-        <form method="get" action="{% url 'PaginaPrincipal:pagina_inicial' %}" class="data-form">
-          <input type="date" name="data_hoje" value="{{ data_hoje|date:'Y-m-d' }}">
-          <button type="submit">Buscar</button>
-        </form>
-
-        <ul class="lista-agendamentos">
-          {% for agendamento in agendamentos %}
-          <li>
-            {{ agendamento.obra }}
-            <span class="cor"></span>
-          </li>
-          {% empty %}
-          <li>Sem agendamentos para hoje.</li>
+      <h2>Próximas Entregas (5 dias)</h2>
+      <div class="timeline-container">
+        <div class="timeline">
+          {% for dia, agendamentos in timeline.items %}
+          <div class="timeline-day">
+            <div class="timeline-date">{{ dia|date:"D, d/m" }}</div>
+            <div class="timeline-events">
+              {% for agendamento in agendamentos %}
+              <div class="timeline-event">
+                <div class="event-time">{{ agendamento.data_agendamento|date:"H:i" }}</div>
+                <div class="event-details">
+                  <strong>{{ agendamento.obra.nome }}</strong>
+                  <p>{{ agendamento.montador }}</p>
+                </div>
+              </div>
+              {% empty %}
+              <div class="timeline-event empty">
+                Nenhum agendamento
+              </div>
+              {% endfor %}
+            </div>
+          </div>
           {% endfor %}
-        </ul>
-      </div>
-
-      <div class="agenda-semana">
-        <h2>Nessa semana</h2>
-        <ul>
-          {% for dia, entregas in agenda_semana.items %}
-          {% if entregas %}
-          <li><strong>{{ dia|date:"d/m" }}</strong>: {{ entregas|length }} entrega{{ entregas|length|pluralize:"s" }}</li>
-          {% else %}
-          <li><strong>{{ dia|date:"d/m" }}</strong>: Nenhuma entrega</li>
-          {% endif %}
-          {% endfor %}
-        </ul>
+        </div>
       </div>
     </div>
-
   </div>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{% static 'TelaPrincipal/home.js' %}"></script>
 {% endblock %}

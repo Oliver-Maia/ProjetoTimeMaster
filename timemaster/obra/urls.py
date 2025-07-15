@@ -5,7 +5,10 @@ from . import views
 app_name = 'obra'
 
 urlpatterns = [
-    path('cadastro/', views.cadastrar_obra, name='cadastrar_obra'),
-    path('', include('PaginaPrincipal.urls')),
- 
+    path('cadastrar/', views.cadastrar_obra, name='cadastrar_obra'),
+    path('editar-excluir/', views.lista_obras, name='editar_excluir_obras'),  # Unificada
+    path('listar/', views.lista_obras, name='lista_obras'),  # Mesma view para ambos
+    path('api/listar/', views.lista_obras, name='api_listar_obras'),  # Endpoint API
+    path('api/obras/<int:obra_id>/editar/', views.editar_obra, name='api_editar_obra'),
+    path('api/obras/<int:obra_id>/excluir/', views.excluir_obra, name='api_excluir_obra'),
 ]

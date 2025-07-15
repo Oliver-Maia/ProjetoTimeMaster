@@ -1,23 +1,26 @@
 :root {
   --accent-color: #fd9432;
   --gradient-color: #0d32d8;
+  --sidebar-width: 240px;
 }
 
 html, body {
-    height: 100%; /* Faz com que html e body ocupem 100% da altura da tela */
+    height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden; /* Previne rolagem horizontal */
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   z-index: 999;
-  width: 240px;
-  left: -240px;
+  width: var(--sidebar-width);
+  left: calc(-1 * var(--sidebar-width));
   height: 100%;
   background-color: #202020;
   transition: left 0.3s ease;
+  overflow-y: auto; /* Adiciona rolagem se necessário */
 }
 
 .sidebar.sidebar-open {
@@ -25,13 +28,14 @@ html, body {
 }
 
 .sidebar header {
-  font-size: 28px;
+  font-size: 1.75rem; /* 28px */
   color: #ffffff;
   line-height: 70px;
   text-align: center;
   background-color: #202020;
   user-select: none;
   font-family: 'Lato', sans-serif;
+  padding: 0 10px;
 }
 
 .link-sidebar {
@@ -40,17 +44,20 @@ html, body {
   width: 100%;
   color: #ffffff;
   line-height: 65px;
-  padding-left: 30px;
+  padding-left: 1.875rem; /* 30px */
   box-sizing: border-box;
   border-left: 5px solid transparent;
   font-family: 'Lato', sans-serif;
   text-decoration: none;
   transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .link-sidebar i {
-  font-size: 23px;
-  margin-right: 16px;
+  font-size: 1.4375rem; /* 23px */
+  margin-right: 1rem; /* 16px */
 }
 
 .link-sidebar span {
@@ -64,32 +71,31 @@ html, body {
   color: #fff;
   background: linear-gradient(to left, var(--accent-color), var(--gradient-color));
 }
-/* Submenu - fechado por padrão */
+
+/* Submenu */
 .sidebar-item .submenu {
   display: none;
-  padding-left: 20px;
+  padding-left: 1.25rem; /* 20px */
   margin: 0;
   background-color: #2b2b2b;
   list-style: none;
   transition: max-height 0.3s ease;
 }
 
-/* Submenu visível ao ativar */
 .sidebar-item.active .submenu {
   display: block;
 }
 
-/* Estilo dos links do submenu */
 .submenu li {
   list-style: none;
 }
 
 .submenu li a {
   display: block;
-  padding: 10px 30px;
+  padding: 0.625rem 1.875rem; /* 10px 30px */
   color: #ccc;
   text-decoration: none;
-  font-size: 14px;
+  font-size: 0.875rem; /* 14px */
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -98,8 +104,6 @@ html, body {
   color: #fff;
 }
 
-
-
 /* Topbar */
 .topbar {
   height: 60px;
@@ -107,38 +111,41 @@ html, body {
   color: #fff;
   display: flex;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 1.25rem; /* 20px */
   position: fixed;
   width: 100%;
   top: 0;
   z-index: 998;
-  border-radius: 11px 11px 11px 11px;
+  border-radius: 11px 11px 0 0;
   transition: margin-left 0.3s ease;
+  box-sizing: border-box;
 }
 
 .topbar-left i {
-  font-size: 22px;
+  font-size: 1.375rem; /* 22px */
   cursor: pointer;
 }
 
 .nameuser {
-  font-size: 20px;
+  font-size: 1.25rem; /* 20px */
   color: #fff;
-  margin-left: 20px;
+  margin-left: 1.25rem; /* 20px */
   padding: 0;
   flex: 0 1 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-menu {
-  position: fixed;
-  right: 20px;
-  top: 20px;
+  position: absolute;
+  right: 1.25rem; /* 20px */
+  top: 1.25rem; /* 20px */
   z-index: 1000;
-  transition: right 0.3s ease;
 }
 
 .user-menu span {
-  font-size: 20px;
+  font-size: 1.25rem; /* 20px */
   cursor: pointer;
 }
 
@@ -148,15 +155,15 @@ html, body {
   background-color: #fff;
   color: #000;
   right: 0;
-  top: 30px;
+  top: 100%;
   min-width: 150px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 999;
 }
 
 .dropdown-content a {
-  font-size: 18px;
-  padding: 10px 15px;
+  font-size: 1.125rem; /* 18px */
+  padding: 0.625rem 0.9375rem; /* 10px 15px */
   display: block;
   text-decoration: none;
   color: #000;
@@ -172,26 +179,84 @@ html, body {
 
 /* Conteúdo */
 .content {
-  position: absolute;
-  top: 62px; 
-  left: 10px; 
-  right: 10px; 
-  bottom: 05px; 
+  position: relative;
+  margin-top: 60px;
+  margin-left: 0;
+  padding: 10px;
   background-color: #e0e0e0;
-  overflow-y: scroll; /* Permite rolagem vertical, necessário para tela agenda */
-  transition: padding-left 0.3s ease;
-  border-radius:  0px 0px 11px 11px;
+  overflow-y: auto;
+  min-height: calc(100vh - 70px);
+  transition: margin-left 0.3s ease;
+  border-radius: 0 0 11px 11px;
 }
-
-
 
 /* Quando o menu está aberto */
+.sidebar-open + .content,
 .shifted {
-  margin-left: 240px;
+  margin-left: var(--sidebar-width);
 }
 
-/* Responsividade futura (manter desativada por enquanto) */
-@media (max-width: 860px) {
-  /* ativar depois se quiser responsivo */
+/* Media Queries para responsividade */
+@media (max-width: 992px) {
+  :root {
+    --sidebar-width: 200px;
+  }
+  
+  .sidebar header {
+    font-size: 1.5rem;
+  }
+  
+  .link-sidebar {
+    padding-left: 1rem;
+    height: 55px;
+    line-height: 55px;
+  }
+  
+  .link-sidebar i {
+    font-size: 1.2rem;
+    margin-right: 0.8rem;
+  }
 }
 
+@media (max-width: 768px) {
+  .nameuser {
+    font-size: 1rem;
+    margin-left: 0.8rem;
+  }
+  
+  .user-menu span {
+    font-size: 1rem;
+  }
+  
+  .dropdown-content a {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --sidebar-width: 180px;
+  }
+  
+  .topbar {
+    padding: 0 10px;
+  }
+  
+  .link-sidebar span {
+    display: none; /* Esconde texto em telas muito pequenas */
+  }
+  
+  .link-sidebar i {
+    margin-right: 0;
+    font-size: 1.5rem;
+  }
+  
+  .sidebar-item.active .submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 160px;
+    z-index: 1000;
+  }
+}

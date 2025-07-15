@@ -28,9 +28,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_extensions',
     "django_browser_reload",
     "agenda.apps.AgendaConfig",
-    "obra.apps.ObraConfig",
+    "Obra.apps.ObraConfig",
     "PaginaPrincipal.apps.PaginaprincipalConfig",
     "usuario.apps.UsuarioConfig",
 ]
