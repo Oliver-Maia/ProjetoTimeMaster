@@ -4,7 +4,7 @@ from django.utils.timezone import now
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from datetime import timedelta
-from obra.models import obra
+from obra.models import Obra
 from agenda.forms import AgendamentoForm
 from agenda.models import Agendamento
 
@@ -13,7 +13,7 @@ from agenda.models import Agendamento
 def novo_agendamento(request, id=None):
     obra_selecionada = None
     if id:
-        obra_selecionada = get_object_or_404(obra, id=id)
+        obra_selecionada = get_object_or_404(Obra, id=id)
     
     # Processar formulário se for POST
     if request.method == 'POST':
@@ -33,7 +33,7 @@ def novo_agendamento(request, id=None):
             return render(request, 'agenda/novo_agendamento.html', {
                 'form': AgendamentoForm(),
                 'agendamentos': Agendamento.objects.all().order_by('-data_agendamento'),
-                'obras_pendentes': obra.objects.filter(status='pendente'),
+                'obras_pendentes': Obra.objects.filter(status='pendente'),
                 'success_message': 'Agendamento criado com sucesso!'
             })
     else:
@@ -50,9 +50,9 @@ def novo_agendamento(request, id=None):
     # Obter obras filtradas por status
     status_filter = request.GET.get('status')
     if status_filter:
-        obras_filtradas = obra.objects.filter(status=status_filter)
+        obras_filtradas = Obra.objects.filter(status=status_filter)
     else:
-        obras_filtradas = obra.objects.filter(status='pendente')  
+        obras_filtradas = Obra.objects.filter(status='pendente')  
     
     return render(request, template_name, {
         'form': form,

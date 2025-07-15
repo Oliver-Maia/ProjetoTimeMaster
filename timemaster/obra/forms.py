@@ -1,9 +1,9 @@
 from django import forms
-from .models import obra
+from .models import Obra
 
 class ObraForm(forms.ModelForm):
     class Meta:
-        model = obra
+        model = Obra
         fields = ['nome', 'numero', 'endereco', 'cliente',]  
         
     labels = {

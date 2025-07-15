@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'django_extensions',
     "django_browser_reload",
     "agenda.apps.AgendaConfig",
-    "Obra.apps.ObraConfig",
+    "obra.apps.ObraConfig",
     "PaginaPrincipal.apps.PaginaprincipalConfig",
     "usuario.apps.UsuarioConfig",
 ]

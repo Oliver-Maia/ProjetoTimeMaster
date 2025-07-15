@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.db.models import Prefetch
 import json
 from .forms import ObraForm
-from .models import obra
+from .models import Obra
 from agenda.models import Agendamento
 
 @login_required
@@ -41,7 +41,7 @@ def lista_obras(request):
         status = request.GET.get('status', '')
         excluido = request.GET.get('excluido', 'false') == 'true'
         
-        obras = obra.objects.all().prefetch_related(
+        obras = Obra.objects.all().prefetch_related(
             Prefetch('agendamentos', queryset=Agendamento.objects.order_by('data_agendamento'))
         )
         

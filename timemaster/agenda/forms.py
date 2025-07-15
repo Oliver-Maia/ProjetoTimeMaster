@@ -1,6 +1,6 @@
 from django import forms
 from agenda.models import Agendamento
-from obra.models import obra
+from obra.models import Obra
 from usuario.models import usuario
 
 class AgendamentoForm(forms.ModelForm):
@@ -12,7 +12,7 @@ class AgendamentoForm(forms.ModelForm):
         )}
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['obra'].queryset = obra.objects.filter(
+        self.fields['obra'].queryset = Obra.objects.filter(
             previsao_entrega__isnull=True
         ).exclude(
             agendamentos__isnull=False
