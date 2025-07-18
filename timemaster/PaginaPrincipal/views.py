@@ -3,7 +3,7 @@ from collections import defaultdict
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from agenda.models import Agendamento
-from obra.models import obra
+from obra.models import Obra
 
 
 @login_required
@@ -22,10 +22,10 @@ def index(request):
         agendamentos_hoje = Agendamento.objects.filter(data_agendamento__date=data_hoje)
 
     # 🔹 3. Obras por status (novo)
-    obras_pendentes = obra.objects.filter(status='pendente')
-    obras_andamento = obra.objects.filter(status='em_andamento')
-    obras_concluidas = obra.objects.filter(status='concluida')
-    obras_canceladas = obra.objects.filter(status='cancelada')
+    obras_pendentes = Obra.objects.filter(status='pendente')
+    obras_andamento = Obra.objects.filter(status='em_andamento')
+    obras_concluidas = Obra.objects.filter(status='concluida')
+    obras_canceladas = Obra.objects.filter(status='cancelada')
 
     # 🔹 4. Timeline dos próximos 5 dias (ao invés da semana toda)
     timeline = {}
@@ -46,7 +46,7 @@ def index(request):
     total_obras_aberto = obras_pendentes.count() + obras_andamento.count()
     
     # 🔹 6. Obras sem previsão (para o carrossel)
-    obras_sem_previsao = obra.objects.filter(
+    obras_sem_previsao = Obra.objects.filter(
         previsao_entrega__isnull=True,
         status='pendente'  # Apenas obras pendentes
     )

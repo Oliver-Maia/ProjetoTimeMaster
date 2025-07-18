@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='agenda',
             name='obra',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='agendamentos_secundario', to='obra.obra'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='agendamentos_secundario', to='obra.Obra'),
         ),
         migrations.AlterField(
             model_name='agendamento',
