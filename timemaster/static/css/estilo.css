@@ -1,7 +1,7 @@
 :root {
   --accent-color: #fd9432;
   --gradient-color: #0d32d8;
-  --sidebar-width: 240px;
+  --sidebar-width: 225px;
 }
 
 html, body {
@@ -16,23 +16,18 @@ html, body {
   position: fixed;
   z-index: 999;
   width: var(--sidebar-width);
-  left: calc(-1 * var(--sidebar-width));
+  left: 0;
   height: 100%;
-  background-color: #202020;
-  transition: left 0.3s ease;
-  overflow-y: auto; /* Adiciona rolagem se necessário */
+  background-color: #0d173a;
 }
 
-.sidebar.sidebar-open {
-  left: 0;
-}
 
 .sidebar header {
-  font-size: 1.75rem; /* 28px */
+  font-size: 1.65rem;
   color: #ffffff;
-  line-height: 70px;
+  line-height: 60px;
   text-align: center;
-  background-color: #202020;
+  background-color: #0d173a;
   user-select: none;
   font-family: 'Lato', sans-serif;
   padding: 0 10px;
@@ -44,7 +39,7 @@ html, body {
   width: 100%;
   color: #ffffff;
   line-height: 65px;
-  padding-left: 1.875rem; /* 30px */
+  padding-left: 1.705rem; 
   box-sizing: border-box;
   border-left: 5px solid transparent;
   font-family: 'Lato', sans-serif;
@@ -56,7 +51,7 @@ html, body {
 }
 
 .link-sidebar i {
-  font-size: 1.4375rem; /* 23px */
+  font-size: 1.3375rem; 
   margin-right: 1rem; /* 16px */
 }
 
@@ -77,7 +72,7 @@ html, body {
   display: none;
   padding-left: 1.25rem; /* 20px */
   margin: 0;
-  background-color: #2b2b2b;
+  background-color: #020307;
   list-style: none;
   transition: max-height 0.3s ease;
 }
@@ -107,7 +102,7 @@ html, body {
 /* Topbar */
 .topbar {
   height: 60px;
-  background-color: #202020;
+  background-color: #0d173a;
   color: #fff;
   display: flex;
   align-items: center;
@@ -116,7 +111,6 @@ html, body {
   width: 100%;
   top: 0;
   z-index: 998;
-  border-radius: 11px 11px 0 0;
   transition: margin-left 0.3s ease;
   box-sizing: border-box;
 }
@@ -181,12 +175,11 @@ html, body {
 .content {
   position: relative;
   margin-top: 60px;
-  margin-left: 0;
+  margin-left: 225px;
   padding: 10px;
   background-color: #e0e0e0;
   overflow-y: auto;
   min-height: calc(100vh - 70px);
-  transition: margin-left 0.3s ease;
   border-radius: 0 0 11px 11px;
 }
 
@@ -199,7 +192,7 @@ html, body {
 /* Media Queries para responsividade */
 @media (max-width: 992px) {
   :root {
-    --sidebar-width: 200px;
+    --sidebar-width: 225px;
   }
   
   .sidebar header {

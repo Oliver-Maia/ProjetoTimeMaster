@@ -3,13 +3,14 @@
 
 {% block title %}Editar/Excluir Obras - TimeMaster{% endblock %}
 
+{% block content %}
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'obra/editar_excluir_obra.css' %}">
+<link rel="stylesheet" href="{% static 'obra/editar_excluir_obra.css' %}">
 {% endblock %}
 
-{% block content %}
+
     <div class="obra-container">
-        <h1>Editar/Excluir Obras</h1>
+        <h2>Editar/Excluir Obras</h2>
         
         <!-- Filtros -->
         <div class="filtros">
@@ -17,7 +18,7 @@
                 <option value="">Todos os status</option>
                 <option value="pendente">Pendente</option>
                 <option value="em_andamento">Em Andamento</option>
-                <option value="concluida">Concluída</option>
+                <option value="realizado">Realizado</option>
                 <option value="cancelada">Cancelada</option>
                 <option value="excluida">Excluída</option>
             </select>
@@ -81,11 +82,15 @@
                         <input type="text" id="endereco">
                     </div>
                     <div class="form-group">
+                        <label for="cliente">Cliente:</label>
+                        <input type="text" id="cliente">
+                    </div>
+                    <div class="form-group">
                         <label for="status">Status:</label>
                         <select id="status" required>
                             <option value="pendente">Pendente</option>
                             <option value="em_andamento">Em Andamento</option>
-                            <option value="concluida">Concluída</option>
+                            <option value="realizado">Realizado</option>
                             <option value="cancelada">Cancelada</option>
                         </select>
                     </div>

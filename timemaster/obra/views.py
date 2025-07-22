@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.http import JsonResponse
 from django.contrib import messages
@@ -35,35 +36,40 @@ def cadastrar_obra(request):
 
     return render(request, 'obra/cadastro_obra.html', {'form': form})
 
+from django.db.models import Count
 @login_required
 def lista_obras(request):
     try:
         status = request.GET.get('status', '')
         excluido = request.GET.get('excluido', 'false') == 'true'
         
+        # Query base otimizada
         obras = Obra.objects.all().prefetch_related(
-            Prefetch('agendamentos', queryset=Agendamento.objects.order_by('data_agendamento'))
-        )
+            Prefetch('agendamentos', queryset=Agendamento.objects.order_by('data_agendamento')))
         
-        if status:
-            obras = obras.filter(status=status)
+        # Filtro de exclusão
         if not excluido:
             obras = obras.filter(excluido=False)
         
-        # Atualiza status
-        for ob in obras:
-            ob.atualizar_status()
+        # Filtro por status
+        if status:
+            if status == 'pendente':
+                # Obras pendentes são aquelas SEM agendamentos
+                obras = obras.annotate(
+                    num_agendamentos=Count('agendamentos')
+                ).filter(num_agendamentos=0)
+            else:
+                obras = obras.filter(status=status)
         
         # Resposta para API
         if request.path.startswith('/obras/api/') or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             data = [{
                 'id': ob.id,
                 'nome': ob.nome,
-                'numero': ob.numero or '',
-                'endereco': ob.endereco or '',
                 'status': ob.status,
-                'data_agendamento': ob.agendamentos.first().data_agendamento.isoformat() if ob.agendamentos.exists() else None,
-                'excluido': ob.excluido
+                'tem_agendamento': ob.agendamentos.exists(),
+                'data_agendamento': ob.agendamentos.first().data_agendamento.isoformat() 
+                    if ob.agendamentos.exists() else None
             } for ob in obras]
             return JsonResponse(data, safe=False)
         
@@ -80,53 +86,38 @@ def lista_obras(request):
         messages.error(request, 'Erro ao carregar a lista de obras')
         return render(request, 'obra/editar_excluir_obra.html', {'obras': []})
 
-
+@csrf_exempt
 @require_http_methods(["PUT"])
 @login_required
 def editar_obra(request, obra_id):
-    obra = get_object_or_404(obra, id=obra_id)
-    
     try:
         data = json.loads(request.body)
-        form = ObraForm(data, instance=obra)
-        if form.is_valid():
-            obra = form.save()
-            return JsonResponse({
-                'success': True,
-                'message': 'Obra atualizada com sucesso!',
-                'data': {
-                    'id': obra.id,
-                    'nome': obra.nome,
-                    'status': obra.status
-                }
-            })
-        else:
-            return JsonResponse({
-                'success': False,
-                'errors': form.errors
-            }, status=400)
+        obra = Obra.objects.get(pk=obra_id)
+
+        obra.nome = data.get('nome', obra.nome)
+        obra.numero = data.get('numero', obra.numero)
+        obra.cliente = data.get('cliente', obra.cliente)
+        obra.endereco = data.get('endereco', obra.endereco)
+        obra.status = data.get('status', obra.status)
+
+        obra.save()
+
+        return JsonResponse({'success': True})
+
+    except Obra.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Obra não encontrada'}, status=404)
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 @require_http_methods(["DELETE"])
 @login_required
 def excluir_obra(request, obra_id):
-    obra = get_object_or_404(obra, id=obra_id)
-    
     try:
+        obra = Obra.objects.get(pk=obra_id)
         obra.excluido = True
-        obra.usuario_exclusao = request.user
-        obra.data_exclusao = timezone.now()
         obra.save()
-        return JsonResponse({
-            'success': True,
-            'message': 'Obra excluída com sucesso!'
-        })
+        return JsonResponse({'success': True})
+    except Obra.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Obra não encontrada'}, status=404)
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)

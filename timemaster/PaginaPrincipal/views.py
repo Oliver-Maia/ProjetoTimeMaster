@@ -24,7 +24,7 @@ def index(request):
     # 🔹 3. Obras por status (novo)
     obras_pendentes = Obra.objects.filter(status='pendente')
     obras_andamento = Obra.objects.filter(status='em_andamento')
-    obras_concluidas = Obra.objects.filter(status='concluida')
+    obras_realizado = Obra.objects.filter(status='realizado')
     obras_canceladas = Obra.objects.filter(status='cancelada')
 
     # 🔹 4. Timeline dos próximos 5 dias (ao invés da semana toda)
@@ -58,7 +58,7 @@ def index(request):
         # Novos contextos para status
         'obras_pendentes': obras_pendentes,
         'obras_andamento': obras_andamento,
-        'obras_concluidas': obras_concluidas,
+        'obras_realizado': obras_realizado,
         'obras_canceladas': obras_canceladas,
         
         # Timeline dos próximos 5 dias

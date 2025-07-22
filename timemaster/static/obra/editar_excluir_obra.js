@@ -9,37 +9,50 @@ document.addEventListener('DOMContentLoaded', function() {
     const formEdicao = document.getElementById('form-edicao');
     const btnConfirmarExclusao = document.getElementById('btn-confirmar-exclusao');
     const btnCancelarExclusao = document.getElementById('btn-cancelar-exclusao');
+    const urlParams = new URLSearchParams(window.location.search);
+    const statusParam = urlParams.get('status');
     
     // Variáveis globais
     let obras = [];
     let obraParaExcluir = null;
     
     // Carregar obras
-    function carregarObras(filtro = '') {
-        fetch(`/obras/api/listar/?status=${filtro}`, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => {
-            if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-            return response.json();
-        })
-        .then(data => {
-            obras = data;
-            renderizarObras();
-        })
-        .catch(error => {
-            console.error('Erro ao carregar obras:', error);
-            alert('Erro ao carregar obras. Por favor, recarregue a página.');
+    async function carregarObras(status = '') {
+    try {
+        // Mostrar loading
+        obrasList.innerHTML = '<tr><td colspan="6">Carregando...</td></tr>';
+        
+        const response = await fetch(`/obras/api/listar/?status=${status}`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status}`);
+        }
+        
+        const obrasData = await response.json();
+        let obrasFiltradas = obrasData;
+        
+        // Filtro adicional no cliente para pendentes
+        if (status === 'pendente') {
+            obrasFiltradas = obrasData.filter(obra => !obra.tem_agendamento);
+        }
+        
+        renderizarObras(obrasFiltradas);
+        
+        // Atualizar filtro ativo visualmente
+        document.querySelectorAll('.filtro-link').forEach(link => {
+            link.classList.toggle('active', link.getAttribute('data-status') === status);
         });
+        
+    } catch (error) {
+        console.error('Erro ao carregar obras:', error);
+        obrasList.innerHTML = '<tr><td colspan="6">Erro ao carregar dados</td></tr>';
     }
+}
     // Renderizar obras na tabela
-    function renderizarObras() {
+    function renderizarObras(obrasParaRenderizar) {
         obrasList.innerHTML = '';
         
-        obras.forEach(obra => {
+        obrasParaRenderizar.forEach(obra => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${obra.nome}</td>
@@ -61,7 +74,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', abrirModalConfirmacao);
+        btn.addEventListener('click', (e) => {
+            obraParaExcluir = parseInt(e.target.getAttribute('data-id'));
+            modalConfirmacao.style.display = 'block';
+                });
         });
     }
     
@@ -70,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusMap = {
             'pendente': 'Pendente',
             'em_andamento': 'Em Andamento',
-            'concluida': 'Concluída',
+            'realizado': 'Realizado',
             'cancelada': 'Cancelada',
             'excluida': 'Excluída'
         };
@@ -93,6 +109,7 @@ function abrirModalEdicao(e) {
         document.getElementById('obra-id').value = obra.id;
         document.getElementById('nome').value = obra.nome;
         document.getElementById('numero').value = obra.numero || '';
+        document.getElementById('cliente').value = obra.cliente || '';
         document.getElementById('endereco').value = obra.endereco || '';
         document.getElementById('status').value = obra.status;
         
@@ -160,8 +177,10 @@ btnConfirmarExclusao.addEventListener('click', confirmarExclusao);
     }
     
     // Event Listeners
-    btnFiltrar.addEventListener('click', () => {
+    btnFiltrar.addEventListener('click', (e) => {
+        e.preventDefault();
         carregarObras(filtroStatus.value);
+        history.pushState({}, '', `?status=${filtroStatus.value}`);
     });
     
     closeModal.addEventListener('click', fecharModais);
@@ -180,6 +199,7 @@ btnConfirmarExclusao.addEventListener('click', confirmarExclusao);
         const obraData = {
             nome: document.getElementById('nome').value,
             numero: document.getElementById('numero').value,
+            cliente: document.getElementById('cliente').value, 
             endereco: document.getElementById('endereco').value,
             status: document.getElementById('status').value
         };

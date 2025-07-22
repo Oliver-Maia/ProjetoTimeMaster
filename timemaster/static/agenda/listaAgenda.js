@@ -26,31 +26,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("abrir-modal");
   const fechar = document.getElementById("fechar-modal");
 
-  btn.onclick = () => modal.style.display = "block";
-  fechar.onclick = () => modal.style.display = "none";
-  window.onclick = e => {
-    if (e.target === modal) modal.style.display = "none";
-  }
+
   // Filtros por status
-  document.querySelectorAll('.status-card').forEach(card => {
-  card.addEventListener('click', () => {
-    const status = card.getAttribute('data-status');
-
-    // Marca visual
-    document.querySelectorAll('.status-card').forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-
-    // Redireciona com o filtro
-    const nome = document.getElementById("filtro-nome").value;
-    const data = document.getElementById("filtro-data").value;
-    const query = new URLSearchParams({
-      nome: nome || "",
-      data: data || "",
-      status: status
-    }).toString();
-    window.location.href = `?${query}`;
-  });
+ document.querySelectorAll('.status-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const status = card.getAttribute('data-status');
+        const nome = document.getElementById("filtro-nome").value;
+        const data = document.getElementById("filtro-data").value;
+        
+        // Cria URL com todos os parâmetros
+        const params = new URLSearchParams();
+        if (nome) params.append('nome', nome);
+        if (data) params.append('data', data);
+        params.append('status', status);
+        
+        // Mantém a paginação se existir
+        const page = new URL(window.location.href).searchParams.get('page');
+        if (page) params.append('page', page);
+        
+        window.location.href = `?${params.toString()}`;
+    });
 });
 
+// listaAgenda.js
+document.addEventListener('DOMContentLoaded', function() {
+    // ... seu código existente ...
+
+  
+    // Função auxiliar para pegar o cookie CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+});
 
 });

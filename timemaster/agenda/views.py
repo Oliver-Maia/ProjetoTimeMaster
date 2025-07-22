@@ -19,15 +19,25 @@ def novo_agendamento(request, id=None):
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
         if form.is_valid():
-            agendamento = form.save(commit=False)
-            agendamento.data_criacao = now()
-            agendamento.realizado = False
-            agendamento.save()
+         agendamento = form.save(commit=False)
+
+        if agendamento.obra.status != 'em_andamento':
+            return render(request, 'agenda/novo_agendamento.html', {
+                'form': form,
+                'agendamentos': Agendamento.objects.all().order_by('-data_agendamento'),
+                'obras_pendentes': Obra.objects.filter(status='pendente'),
+                'error_message': 'Só é permitido agendar obras com status "Em Andamento".'
+            })
+
+        agendamento.data_criacao = now()
+        agendamento.realizado = False
+        agendamento.save()
+
             
             # Atualizar previsão de entrega e status da obra
-            if agendamento.obra:
-                agendamento.obra.previsao_entrega = agendamento.data_agendamento
-                agendamento.obra.atualizar_status() # Atualiza status da obra após agendamento
+        if agendamento.obra:
+            agendamento.obra.previsao_entrega = agendamento.data_agendamento
+            agendamento.obra.atualizar_status() # Atualiza status da obra após agendamento
             
             # Recarregar a página com formulário vazio após salvar
             return render(request, 'agenda/novo_agendamento.html', {
@@ -62,29 +72,39 @@ def novo_agendamento(request, id=None):
         'status_filter': status_filter  
     })
 
+from django.shortcuts import redirect
+
 @login_required
 def listar_agendamentos(request):
     nome = request.GET.get('nome', '')
     data = request.GET.get('data', '')
-    agendamentos = Agendamento.objects.select_related('obra').order_by('data_agendamento')
-    montador_nome = request.GET.get('montador', '')
+    status_filtro = request.GET.get('status', '')
 
+    # Filtrar apenas agendamentos existentes, com joins
+    agendamentos = Agendamento.objects.select_related('obra', 'montador').filter(obra__excluido=False)
+
+    # Filtros
     if nome:
         agendamentos = agendamentos.filter(obra__nome__icontains=nome)
-    
     if data:
         agendamentos = agendamentos.filter(data_agendamento__date=data)
+    if status_filtro:
+        agendamentos = agendamentos.filter(obra__status=status_filtro)
 
-    paginator = Paginator(agendamentos, 3)  # Exibe 10 agendamentos por página
-    pagina_num = request.GET.get('page')
-    pagina_obj = paginator.get_page(pagina_num)
-    
-    return render(request, "agenda/listar_agendamentos.html", {
-        "pagina_obj": pagina_obj,
-        "nome": nome,
-        "data": data,
-        'montador': montador_nome,
-    })
+    agendamentos = agendamentos.order_by('-data_agendamento')
+
+    # Paginação
+    paginator = Paginator(agendamentos, 10)  # 10 por página
+    page_number = request.GET.get('page')
+    pagina_obj = paginator.get_page(page_number)
+
+    context = {
+        'pagina_obj': pagina_obj,
+        'nome': nome,
+        'data': data,
+        'status_filtro': status_filtro,
+    }
+    return render(request, 'agenda/listar_agendamentos.html', context)
 
 @login_required
 def eventos_json(request):
@@ -104,13 +124,11 @@ def eventos_json(request):
             'color': cores.get(evento.montador, '#7f8c8d'),
         }
 
-        # Se o evento é para ser de dia inteiro, podemos explicitá-lo
-        # E, para eventos all-day, o 'end' é exclusivo (dia seguinte 00:00:00)
         if evento.data_agendamento.hour == 0 and \
            evento.data_agendamento.minute == 0 and \
            evento.data_agendamento.second == 0:
             event_dict['allDay'] = True
-            # Para um evento allDay que ocorre no dia X, o 'end' deve ser X + 1 dia
+            # Se for 00:00:00, define o final como o dia seguinte
             event_dict['end'] = (evento.data_agendamento + timedelta(days=1)).isoformat()
         else:
             # Se não for 00:00:00, use seu cálculo de duração padrão
@@ -119,6 +137,30 @@ def eventos_json(request):
         data.append(event_dict)
 
     return JsonResponse(data, safe=False)
+
+@login_required
+def atualizar_status(request, agendamento_id, novo_status):
+    if request.method == 'POST':
+        agendamento = get_object_or_404(Agendamento, id=agendamento_id)
+        
+        if novo_status == 'concluido':
+            agendamento.realizado = True
+            agendamento.cancelado = False
+        elif novo_status == 'cancelado':
+            agendamento.cancelado = True
+            agendamento.realizado = False
+        
+        agendamento.save()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'status': agendamento.get_status_display(),
+                'status_class': agendamento.status
+            })
+        return redirect('listar_agendamentos')
+    
+    return JsonResponse({'success': False}, status=400)
 
 @login_required
 def tela_agenda(request):

@@ -4,14 +4,14 @@ from django.conf import settings
 class Obra(models.Model):
     STATUS_PENDENTE = 'pendente'
     STATUS_ANDAMENTO = 'em_andamento'
-    STATUS_CONCLUIDA = 'concluida'
+    STATUS_REALIZADO = 'Realizado'
     STATUS_CANCELADA = 'cancelada'
     STATUS_EXCLUIDA = 'excluida'
 
     STATUS_CHOICES = [
         (STATUS_PENDENTE, 'Pendente'),
         (STATUS_ANDAMENTO, 'Em Andamento'),
-        (STATUS_CONCLUIDA, 'Concluída'),
+        (STATUS_REALIZADO, 'Realizado'),
         (STATUS_CANCELADA, 'Cancelada'),
         (STATUS_EXCLUIDA, 'Excluída'),
     ]
@@ -31,21 +31,23 @@ class Obra(models.Model):
     data_exclusao = models.DateTimeField(null=True, blank=True)
 
     def atualizar_status(self):
-        from agenda.models import Agendamento
-        
-        if self.excluido:
-            self.status = self.STATUS_EXCLUIDA
-            self.save()
+        """
+        Atualiza o status da obra baseado nos agendamentos
+        """
+        if not hasattr(self, 'agendamentos'):
             return
-        
-        agendamento = Agendamento.objects.filter(obra=self).first()
-        
-        if not agendamento:
-            self.status = self.STATUS_PENDENTE
-        elif agendamento.realizado:
-            self.status = self.STATUS_CONCLUIDA
+            
+        if self.agendamentos.exists():
+            ultimo_agendamento = self.agendamentos.latest('data_agendamento')
+            
+            if ultimo_agendamento.cancelado:
+                self.status = 'cancelado'
+            elif ultimo_agendamento.realizado:
+                self.status = 'concluido'
+            else:
+                self.status = 'em_andamento'
         else:
-            self.status = self.STATUS_ANDAMENTO
+            self.status = 'pendente'
         
         self.save()
 

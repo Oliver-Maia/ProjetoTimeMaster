@@ -10,6 +10,8 @@
 
 
 <div class="lista-agenda-container">
+  <h2>Lista de Agendamentos</h2>
+
 
   <!-- FILTROS -->
   <form method="get" class="filtros-tabela">
@@ -19,15 +21,6 @@
       <i class="fas fa-search"></i>
     </button>
   </form>
-
-  <!-- FILTROS POR STATUS -->
-  <div class="filtros-status">
-    <div class="status-card" data-status="pendente">Pendente</div>
-    <div class="status-card" data-status="em_andamento">Em Andamento</div>
-    <div class="status-card" data-status="concluido">Concluído</div>
-    <div class="status-card" data-status="cancelada">Cancelada</div>
-  </div>
-
 
   <!-- TABELA -->
   <section class="tabela-wrapper">
@@ -42,51 +35,38 @@
         </tr>
       </thead>
       <tbody id="tabela-corpo">
-        {% for agendamento in pagina_obj %}
-          <tr>
-            <td>{{ agendamento.obra.id }}</td>
-            <td>{{ agendamento.obra.nome }}</td>
-            <td>{{ agendamento.obra.endereco }}</td>
-            <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
-            <td>{{ agendamento.montador.get_full_name }}</td>
-          </tr>
-        {% empty %}
-          <tr>
-            <td colspan="4">Nenhum agendamento encontrado.</td>
-          </tr>
-        {% endfor %}
-      </tbody>
+  {% for agendamento in pagina_obj %}
+    <tr>
+      <td>{{ agendamento.obra.id }}</td>
+      <td>{{ agendamento.obra.nome }}</td>
+      <td>{{ agendamento.obra.endereco }}</td>
+      <td>{{ agendamento.data_agendamento|date:"d/m/Y H:i" }}</td>
+      <td>{{ agendamento.montador.get_full_name }}</td>
+    </tr>
+  {% empty %}
+    <tr>
+      <td colspan="6">Nenhum agendamento encontrado.</td>
+    </tr>
+    {% endfor %}
+</tbody>
     </table>
   </section>
 
   <!-- PAGINAÇÃO -->
-  <div class="paginacao">
+<div class="paginacao">
     {% if pagina_obj.has_previous %}
-      <a href="?page=1&nome={{ nome }}&data={{ data }}">&laquo; Primeira</a>
-      <a href="?page={{ pagina_obj.previous_page_number }}&nome={{ nome }}&data={{ data }}">Anterior</a>
+        <a href="?page=1&nome={{ nome }}&data={{ data }}&status={{ status_filtro }}">&laquo; Primeira</a>
+        <a href="?page={{ pagina_obj.previous_page_number }}&nome={{ nome }}&data={{ data }}&status={{ status_filtro }}">Anterior</a>
     {% endif %}
 
     <span>Página {{ pagina_obj.number }} de {{ pagina_obj.paginator.num_pages }}</span>
 
     {% if pagina_obj.has_next %}
-      <a href="?page={{ pagina_obj.next_page_number }}&nome={{ nome }}&data={{ data }}">Próxima</a>
-      <a href="?page={{ pagina_obj.paginator.num_pages }}&nome={{ nome }}&data={{ data }}">Última &raquo;</a>
+        <a href="?page={{ pagina_obj.next_page_number }}&nome={{ nome }}&data={{ data }}&status={{ status_filtro }}">Próxima</a>
+        <a href="?page={{ pagina_obj.paginator.num_pages }}&nome={{ nome }}&data={{ data }}&status={{ status_filtro }}">Última &raquo;</a>
     {% endif %}
-  </div>
-
-  <!-- BOTÃO DE NOVO AGENDAMENTO -->
-  <button id="abrir-modal" data-url="{% url 'agenda:novo_agendamento' %}">
-    + Novo Agendamento
-  </button>
 </div>
 
-<!-- MODAL -->
-<div id="modal-agendamento" class="modal">
-  <div class="modal-conteudo">
-    <span class="fechar" id="fechar-modal">&times;</span>
-    <iframe id="form-agendamento" src="{% url 'agenda:novo_agendamento' %}?modal=1" frameborder="0"></iframe>
-  </div>
-</div>
 
 
 

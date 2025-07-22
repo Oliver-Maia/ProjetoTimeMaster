@@ -24,18 +24,21 @@
       <h3>Obras em Andamento</h3>
       <p class="card-number">{{ obras_andamento.count }}</p>
       <div class="card-actions">
-        <a href="{% url  'agenda:listar' %}?status=em_andamento" title="Ver lista">
-          <i class="fas fa-list"></i>
+        <a href="{% url 'agenda:listar' %}?status=em_andamento" title="Ver lista">
+          <i class="fas fa-list" style="margin-right: 10px;"></i>
+        </a>
+        <a href="{% url 'agenda:calendario' %}" title="Ver calendário">
+          <i class="fas fa-calendar" style="margin-right: 10px;"></i>
         </a>
       </div>
     </div>
 
     <div class="card pendentes">
-      <h3>Obras Pendentes</h3>
+      <h3>Obras Pendentes</h3>  
       <p class="card-number">{{ obras_pendentes.count }}</p>
       <div class="card-actions">
-        <a href="{% url  'agenda:listar' %}?status=pendente" title="Ver lista">
-          <i class="fas fa-list"></i>
+        <a href="{%url 'agenda:novo_agendamento' %}" title="Agendar nova obra">
+          <i class="fas fa-plus" style="margin-right: 10px;"></i>
         </a>
       </div>
     </div>
@@ -57,10 +60,12 @@
           <p class="obra-cliente">{{ obra.cliente }}</p>
           <span class="badge badge-pendente">Pendente</span>
         </div>
-        <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
+        <div class="carrossel-actions">
+          <a href="{% url 'agenda:agenda_adicionar_com_obra' obra.id %}" class="btn-agendar">Agendar Obra</a>
+        </div>
       </div>
       {% empty %}
-      <div class="carrossel-item">
+      <div class="carrossel-item empty-message">
         <p>Nenhuma obra pendente</p>
       </div>
       {% endfor %}
@@ -72,32 +77,54 @@
 
     <!-- TIMELINE DOS PRÓXIMOS 5 DIAS -->
     <div class="right-panel">
-      <h2>Próximas Entregas (5 dias)</h2>
-      <div class="timeline-container">
-        <div class="timeline">
-          {% for dia, agendamentos in timeline.items %}
-          <div class="timeline-day">
-            <div class="timeline-date">{{ dia|date:"D, d/m" }}</div>
-            <div class="timeline-events">
-              {% for agendamento in agendamentos %}
-              <div class="timeline-event">
-                <div class="event-time">{{ agendamento.data_agendamento|date:"H:i" }}</div>
-                <div class="event-details">
-                  <strong>{{ agendamento.obra.nome }}</strong>
-                  <p>{{ agendamento.montador }}</p>
-                </div>
-              </div>
-              {% empty %}
-              <div class="timeline-event empty">
-                Nenhum agendamento
-              </div>
-              {% endfor %}
+  <h2>Próximas Entregas (5 dias)</h2>
+  <div class="timeline-container">
+    <div class="timeline">
+      {% for dia, agendamentos in timeline.items %}
+      <div class="timeline-day">
+        <div class="timeline-date">{{ dia|date:"D, d/m" }}</div>
+        <div class="timeline-events">
+          {% for agendamento in agendamentos %}
+          <div class="timeline-event" 
+               data-montador="{{ agendamento.montador }}"
+               data-details='{
+                 "obra": "{{ agendamento.obra.nome }}",
+                 "numero": "{{ agendamento.obra.numero }}",
+                 "cliente": "{{ agendamento.obra.cliente }}",
+                 "hora": "{{ agendamento.data_agendamento|date:"H:i" }}",
+                 "endereco": "{{ agendamento.obra.endereco }}",
+                 "montador": "{{ agendamento.montador }}"
+               }'>
+            <div class="event-compact">
+              <span class="obra-numero">{{ agendamento.obra.numero }}</span>
+              <span class="obra-nome">{{ agendamento.obra.nome }}</span>
             </div>
+          </div>
+          {% empty %}
+          <div class="timeline-event empty">
+            Nenhum agendamento
           </div>
           {% endfor %}
         </div>
       </div>
+      {% endfor %}
     </div>
+  </div>
+  
+  <!-- Modal de detalhes -->
+  <div class="event-modal" id="eventModal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <h3 class="modal-title"></h3>
+      <div class="modal-info">
+        <p><strong>Cliente:</strong> <span class="modal-cliente"></span></p>
+        <p><strong>Hora:</strong> <span class="modal-hora"></span></p>
+        <p><strong>Endereço:</strong> <span class="modal-endereco"></span></p>
+        <p><strong>Montador:</strong> <span class="modal-montador"></span></p>
+      </div>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 {% endblock %}

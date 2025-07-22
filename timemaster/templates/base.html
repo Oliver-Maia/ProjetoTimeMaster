@@ -18,9 +18,7 @@
   <div class="topbar-left">
     <i class="fas fa-bars" id="openSidebar"></i>
   </div>
-  <div class="nameuser">
-    <span class="user-name">Bem-vindo, {{ user.first_name }}</span>
-  </div>
+
   <div class="topbar-right">
     <div class="user-menu">
       <span id="userButton">Usuário ▾</span>
@@ -43,7 +41,7 @@
 
 <div class="sidebar-item {% if request.resolver_match.url_name == 'novo_agendamento' or request.resolver_match.url_name == 'listar' %}active{% endif %}">
   <a href="#" class="link-sidebar toggle-submenu {% if request.resolver_match.url_name == 'novo_agendamento' or request.resolver_match.url_name == 'listar' %}active{% endif %}">
-    <i class="fas fa-calendar-days"></i><span>Agenda</span>
+    <i class="fas fa-calendar-day"></i><span>Agenda</span>
   </a>
   <ul class="submenu">
     <li><a href="{% url 'agenda:novo_agendamento' %}">Novo Agendamento</a></li>
@@ -59,7 +57,6 @@
   <ul class="submenu">
     <li><a href="{% url 'obra:cadastrar_obra' %}">Cadastrar Obra</a></li>
     <li><a href="{% url 'obra:lista_obras' %}">Editar/Excluir Obras</a></li>
-    <li><a href="{% url 'obra:lista_obras' %}">Listar Obras</a></li>
   </ul>
 </div>
 </div>

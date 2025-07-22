@@ -4,20 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const sidebar = document.getElementById('sidebar');
   const content = document.getElementById('content');
   const topbar = document.querySelector('.topbar');
-  const openSidebarBtn = document.getElementById('openSidebar');
   const toggles = document.querySelectorAll('.toggle-submenu');
   const userButton = document.getElementById('userButton');
   const userDropdown = document.getElementById('userDropdown');
-
-  // Sidebar toggle
-  if (sidebar && content && topbar && openSidebarBtn) {
-    openSidebarBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('sidebar-open');
-      content.classList.toggle('shifted');
-      topbar.classList.toggle('shifted');
-       console.log('Sidebar toggled')
-    });
-  }
 
   // User dropdown toggle
   if (userButton && userDropdown) {
