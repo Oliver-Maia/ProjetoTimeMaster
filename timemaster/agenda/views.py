@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.core.paginator import Paginator
+from django.contrib import messages
 from django.http import JsonResponse
 from datetime import timedelta
 from obra.models import Obra
@@ -14,62 +15,69 @@ def novo_agendamento(request, id=None):
     obra_selecionada = None
     if id:
         obra_selecionada = get_object_or_404(Obra, id=id)
-    
+
     # Processar formulário se for POST
     if request.method == 'POST':
         form = AgendamentoForm(request.POST)
-        if form.is_valid():
-         agendamento = form.save(commit=False)
 
-        if agendamento.obra.status != 'em_andamento':
+        if form.is_valid():
+            agendamento = form.save(commit=False)
+            
+
+            if agendamento.obra.status != 'pendente':
+                messages.error(request, 'Só é permitido agendar obras com status "Pendente".')
+                return redirect('agenda:agenda_adicionar_com_obra', id=agendamento.obra.id)
+
+            agendamento.data_criacao = now()
+            agendamento.realizado = False
+            agendamento.save()
+            
+            # Atualizar o status da obra após agendar
+            if agendamento.obra:
+                agendamento.obra.previsao_entrega = agendamento.data_agendamento
+                agendamento.obra.status = 'em_andamento'
+                agendamento.obra.save()
+            
+            messages.success(request, 'Agendamento criado com sucesso!')
+            
+            # Após salvar, redirecionar para a URL, não para um template
+            return redirect('agenda:novo_agendamento')
+
+        else: # Se o formulário não for válido, exibe os erros e o formulário preenchido
+            messages.error(request, 'O formulário contém erros. Verifique os campos.')
+            
+            # Neste caso, renderizamos o template com o formulário e os erros.
+            agendamentos = Agendamento.objects.all().order_by('-data_criacao')[:5]
+            obras_filtradas = Obra.objects.filter(status='pendente')
+
             return render(request, 'agenda/novo_agendamento.html', {
                 'form': form,
-                'agendamentos': Agendamento.objects.all().order_by('-data_agendamento'),
-                'obras_pendentes': Obra.objects.filter(status='pendente'),
-                'error_message': 'Só é permitido agendar obras com status "Em Andamento".'
+                'agendamentos': agendamentos,
+                'obras_pendentes': obras_filtradas,
+                'obra_selecionada': obra_selecionada
             })
 
-        agendamento.data_criacao = now()
-        agendamento.realizado = False
-        agendamento.save()
 
-            
-            # Atualizar previsão de entrega e status da obra
-        if agendamento.obra:
-            agendamento.obra.previsao_entrega = agendamento.data_agendamento
-            agendamento.obra.atualizar_status() # Atualiza status da obra após agendamento
-            
-            # Recarregar a página com formulário vazio após salvar
-            return render(request, 'agenda/novo_agendamento.html', {
-                'form': AgendamentoForm(),
-                'agendamentos': Agendamento.objects.all().order_by('-data_agendamento'),
-                'obras_pendentes': Obra.objects.filter(status='pendente'),
-                'success_message': 'Agendamento criado com sucesso!'
-            })
-    else:
-        # Inicializar formulário com obra selecionada
+    else:  # Lógica para requisições GET
         initial = {'obra': obra_selecionada} if obra_selecionada else {}
         form = AgendamentoForm(initial=initial)
-    
-    # Verificar se é uma requisição modal
-    template_name = 'agenda/formAgendamento.html' if request.GET.get('modal') == '1' else 'agenda/novo_agendamento.html'
-    
-    # Obter todos os agendamentos para exibir na tabela
-    agendamentos = Agendamento.objects.all().order_by('-data_agendamento') [:5] # Limitar a 5 agendamentos para exibição inicial
-    
-    # Obter obras filtradas por status
+
+    # Lógica de renderização para requisições GET
+    agendamentos = Agendamento.objects.all().order_by('-data_criacao')[:5]
     status_filter = request.GET.get('status')
     if status_filter:
         obras_filtradas = Obra.objects.filter(status=status_filter)
     else:
-        obras_filtradas = Obra.objects.filter(status='pendente')  
+        obras_filtradas = Obra.objects.filter(status='pendente')
+
+    template_name = 'agenda/novo_agendamento.html' if not request.GET.get('modal') else 'agenda/formAgendamento.html'
     
     return render(request, template_name, {
         'form': form,
         'agendamentos': agendamentos,
-        'obras_pendentes': obras_filtradas,  
+        'obras_pendentes': obras_filtradas,
         'obra_selecionada': obra_selecionada,
-        'status_filter': status_filter  
+        'status_filter': status_filter
     })
 
 from django.shortcuts import redirect

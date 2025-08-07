@@ -15,10 +15,7 @@
 
 <!-- Topbar -->
 <div class="topbar">
-  <div class="topbar-left">
-    <i class="fas fa-bars" id="openSidebar"></i>
-  </div>
-
+<header>Menu</header>
   <div class="topbar-right">
     <div class="user-menu">
       <span id="userButton">Usuário ▾</span>
@@ -31,8 +28,8 @@
 </div>
 
 <!-- Sidebar -->
+<div class="page-layout">
 <div class="sidebar" id="sidebar"> 
-  <header>Menu</header>
 
   <a href="{% url 'PaginaPrincipal:pagina_inicial' %}" 
     class="link-sidebar {% if request.resolver_match.url_name == 'pagina_inicial' %}active{% endif %}">
@@ -44,7 +41,7 @@
     <i class="fas fa-calendar-day"></i><span>Agenda</span>
   </a>
   <ul class="submenu">
-    <li><a href="{% url 'agenda:novo_agendamento' %}">Novo Agendamento</a></li>
+    <li><a href="{% url 'agenda:novo_agendamento' %}">Novo Agendamento</a></li> 
     <li><a href="{% url 'agenda:listar' %}">Listar Agendamentos</a></li>
     <li><a href="{% url 'agenda:calendario' %}">Calendário</a></li>
   </ul>
@@ -63,6 +60,7 @@
 <!-- Conteúdo principal -->
 <div class="content" id="content">
   {% block content %}{% endblock %}
+</div>
 </div>
 
 <script src="{% static 'js/main.js' %}"></script>

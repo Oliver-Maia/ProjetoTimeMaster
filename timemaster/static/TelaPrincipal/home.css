@@ -1,33 +1,57 @@
 /* Estilos gerais */
 .main-container {
-  width: calc(100% - 30px); /* Ajuste para considerar as margens */
-  margin: 15px;
-  font-family: 'Lato', sans-serif;
-  background-color: #e0e0e0;
-  display: flex ;
-  flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pagina_inicial-content {
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .left-panel{
-  width: 100%; /* Ocupa 100% da largura */
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Largura fixa para o painel esquerdo */
   background: #fff;
-  padding: 20px;
+  padding: 5px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  box-sizing: border-box;
-  overflow: hidden;
+  box-sizing: fit-content; ;
 }
 
 .right-panel {
-  width: 100%; /* Ocupa 100% da largura */
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   background: #fff;
-  padding: 20px;
+  padding: 5px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   box-sizing: border-box;
 }
+
+.panel-header {
+    text-align: center; 
+    margin-bottom: 15px;
+    width: 100%; 
+}
+
+.panel-header h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin: 0;
+    
+}
+
 /* Cards de estatísticas */
 .dashboard-cards {
   display: flex;
@@ -51,11 +75,15 @@
 }
 
 .card.andamento {
-  border-left-color: #ffa600;
+  border-left-color: #17a2b8;
 }
 
 .card.pendentes {
-  border-left-color: #858585;
+  border-left-color: #ffc107;
+}
+
+.card.concluida {
+  border-left-color: #28a745;
 }
 
 .card h3 {
@@ -87,23 +115,21 @@
 }
 
 .badge-pendente {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
   background-color: #ffc107;
   color: #212529;
+  padding: 3px 8px;
 }
 
 .badge-andamento {
   background-color: #17a2b8;
   color: white;
+  padding: 3px 8px;
 }
 
 .badge-concluida {
   background-color: #28a745;
   color: white;
+  padding: 3px 8px;
 }
 
 /* Container principal do carrossel - Ajustes para responsividade */
@@ -184,13 +210,6 @@
   background: rgba(0,0,0,0.8);
 }
 
-.carrossel-btn.prev {
-  left: 2px; 
-}
-
-.carrossel-btn.next {
-  right: 2px; 
-}
 
 /* Conteúdo dos itens do carrossel */
 .carrossel-container {
@@ -226,7 +245,8 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
-.carrossel-btn {
+.carrossel-btn,
+.timeline-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -245,15 +265,18 @@
   transition: background 0.3s ease;
 }
 
-.carrossel-btn:hover {
+.carrossel-btn:hover,
+.timeline-btn:hover {
   background: rgba(0,0,0,0.8);
 }
 
-.carrossel-btn.prev {
+.carrossel-btn.prev,
+.timeline-btn.prev {
   left: 2px;
 }
 
-.carrossel-btn.next {
+.carrossel-btn.next,
+.timeline-btn.next {
   right: 2px;
 }
 
@@ -315,28 +338,15 @@
 .timeline-container {
   margin: 20px 0;
   position: relative;
-  padding: 0 20px; /* Reduzido o padding lateral */
+  padding: 0 0px; /* Reduzido o padding lateral */
   width: 100%;
   overflow: hidden;
 }
 
 .timeline {
   display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
   height: auto;
   gap: 20px;
-  padding-bottom: 15px;
-  scrollbar-width: thin;
-}
-
-.timeline::-webkit-scrollbar {
-  height: 6px;
-}
-
-.timeline::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
 }
 
 .timeline-day {
@@ -468,6 +478,20 @@
     margin-right: 15px;
   }
   
+  .pagina_inicial-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+}
+
+  .left-panel{
+    min-width: 30px; 
+    nav-left: auto;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
   .carrossel-item {
     min-width: 220px;
     height: 130px;

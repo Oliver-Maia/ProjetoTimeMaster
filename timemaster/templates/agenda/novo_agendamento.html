@@ -7,12 +7,13 @@
 
 {% block content %}
 <div class="agendamento-container">
-  <h2>{% if obra_selecionada %}Agendar {{ obra_selecionada.nome }}{% else %}{% endif %}</h2>
   
-  {% if success_message %}
-  <div class="alert alert-success">
-    {{ success_message }}
-  </div>
+  {% if messages %}
+  <ul class ="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+  </ul>
   {% endif %}
   
   <!-- Formulário de Agendamento -->

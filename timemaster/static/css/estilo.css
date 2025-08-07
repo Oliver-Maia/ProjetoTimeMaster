@@ -1,6 +1,6 @@
 :root {
-  --accent-color: #fd9432;
-  --gradient-color: #0d32d8;
+  --accent-color: #0d32d8;
+  --gradient-color: #42e9f5;
   --sidebar-width: 225px;
 }
 
@@ -8,17 +8,19 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden; /* Previne rolagem horizontal */
+    
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
-  z-index: 999;
-  width: var(--sidebar-width);
+  top: 50px; /* mesma altura da topbar */
   left: 0;
-  height: 100%;
-  background-color: #0d173a;
+  width: 200px; /* ou ajuste para deixar menor */
+  height: calc(100% - 50px);
+  background-color: #001f3f;
+  overflow-y: auto;
+  z-index: 999;
 }
 
 
@@ -101,34 +103,18 @@ html, body {
 
 /* Topbar */
 .topbar {
-  height: 60px;
-  background-color: #0d173a;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  padding: 0 1.25rem; /* 20px */
   position: fixed;
-  width: 100%;
   top: 0;
-  z-index: 998;
-  transition: margin-left 0.3s ease;
-  box-sizing: border-box;
+  left: 0;
+  width: 100%;
+  height: 50px; /* ou o valor que você usa */
+  background-color: #001f3f;
+  z-index: 1000;
 }
 
 .topbar-left i {
   font-size: 1.375rem; /* 22px */
   cursor: pointer;
-}
-
-.nameuser {
-  font-size: 1.25rem; /* 20px */
-  color: #fff;
-  margin-left: 1.25rem; /* 20px */
-  padding: 0;
-  flex: 0 1 auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .user-menu {
@@ -141,6 +127,8 @@ html, body {
 .user-menu span {
   font-size: 1.25rem; /* 20px */
   cursor: pointer;
+  color: #ffffff;
+  text-align: center;
 }
 
 .dropdown-content {
@@ -173,30 +161,38 @@ html, body {
 
 /* Conteúdo */
 .content {
-  position: relative;
-  margin-top: 60px;
-  margin-left: 225px;
-  padding: 10px;
-  background-color: #e0e0e0;
-  overflow-y: auto;
-  min-height: calc(100vh - 70px);
-  border-radius: 0 0 11px 11px;
+  margin-left: 200px; /* igual à largura do sidebar */
+  margin-top: 50px;   /* igual à altura da topbar */
+  padding: 20px;
 }
 
-/* Quando o menu está aberto */
-.sidebar-open + .content,
-.shifted {
-  margin-left: var(--sidebar-width);
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  text-align: center;
 }
+
+
 
 /* Media Queries para responsividade */
 @media (max-width: 992px) {
   :root {
     --sidebar-width: 225px;
   }
+
+  .topbar {
+    padding: 0 10px;
+  }
+
+  .content {
+    margin-left: var(--sidebar-width);
+    min-height: calc(100vh - 60px);
+  }
   
   .sidebar header {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    text-align: center;
   }
   
   .link-sidebar {
@@ -206,9 +202,11 @@ html, body {
   }
   
   .link-sidebar i {
-    font-size: 1.2rem;
+    font-size: 1.0rem;
     margin-right: 0.8rem;
   }
+
+  
 }
 
 @media (max-width: 768px) {

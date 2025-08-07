@@ -15,8 +15,9 @@
       <h3>Total de Obras</h3>
       <p class="card-number">{{ obras_pendentes.count|add:obras_andamento.count }}</p>
       <div class="card-details">
+        <span class="badge badge-andamento">{{ obras_andamento.count }} Andamento</span>
         <span class="badge badge-pendente">{{ obras_pendentes.count }} Pendentes</span>
-        <span class="badge badge-andamento">{{ obras_andamento.count }} Em Andamento</span>
+        <span class="badge badge-concluida">{{ obras_realizado.count }} Concluídas</span>
       </div>
     </div>
 
@@ -42,16 +43,26 @@
         </a>
       </div>
     </div>
+
+    <div class="card concluida">
+      <h3>Obras Concluídas</h3>
+      <p class="card-number">{{ obras_realizado.count }}</p>
+      <div class="card-actions">
+        <a href="{% url 'agenda:listar' %}?status=realizado" title="Ver lista">
+          <i class="fas fa-list" style="margin-right: 10px;"></i>
+        </a>
+      </div>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="pagina_inicial-content">
     <!-- PAINEL DE OBRAS PENDENTES (CARROSSEL) -->
   <div class="left-panel">
-  <h2>Obras Pendentes</h2>
+    <div class="panel-header">
+      <h2>Obras Pendentes</h2>
+    </div>
   <div class="carrossel-container">
     <button class="carrossel-btn prev" aria-label="Slide anterior">&#10094;</button>
-    
     <div class="carrossel">
       {% for obra in obras_pendentes %}
       <div class="carrossel-item">
@@ -70,46 +81,51 @@
       </div>
       {% endfor %}
     </div>
-    
     <button class="carrossel-btn next" aria-label="Próximo slide">&#10095;</button>
   </div>
   </div>
 
     <!-- TIMELINE DOS PRÓXIMOS 5 DIAS -->
     <div class="right-panel">
-  <h2>Próximas Entregas (5 dias)</h2>
-  <div class="timeline-container">
-    <div class="timeline">
-      {% for dia, agendamentos in timeline.items %}
-      <div class="timeline-day">
-        <div class="timeline-date">{{ dia|date:"D, d/m" }}</div>
-        <div class="timeline-events">
-          {% for agendamento in agendamentos %}
-          <div class="timeline-event" 
-               data-montador="{{ agendamento.montador }}"
-               data-details='{
-                 "obra": "{{ agendamento.obra.nome }}",
-                 "numero": "{{ agendamento.obra.numero }}",
-                 "cliente": "{{ agendamento.obra.cliente }}",
-                 "hora": "{{ agendamento.data_agendamento|date:"H:i" }}",
-                 "endereco": "{{ agendamento.obra.endereco }}",
-                 "montador": "{{ agendamento.montador }}"
-               }'>
-            <div class="event-compact">
-              <span class="obra-numero">{{ agendamento.obra.numero }}</span>
-              <span class="obra-nome">{{ agendamento.obra.nome }}</span>
-            </div>
-          </div>
-          {% empty %}
-          <div class="timeline-event empty">
-            Nenhum agendamento
-          </div>
-          {% endfor %}
-        </div>
+      <div class="panel-header">
+        <h2>Próximas Entregas (5 dias)</h2>
       </div>
-      {% endfor %}
+      <div class="timeline-container">
+        <button class="timeline-btn prev" aria-label="Dia anterior">&#10094;</button>
+
+        <div class="timeline">
+          {% for dia, agendamentos in timeline.items %}
+          <div class="timeline-day">
+            <div class="timeline-date">{{ dia|date:"D, d/m" }}</div>
+            <div class="timeline-events">
+              {% for agendamento in agendamentos %}
+              <div class="timeline-event" 
+                  data-montador="{{ agendamento.montador }}"
+                  data-details='{
+                    "obra": "{{ agendamento.obra.nome }}",
+                    "numero": "{{ agendamento.obra.numero }}",
+                    "cliente": "{{ agendamento.obra.cliente }}",
+                    "hora": "{{ agendamento.data_agendamento|date:"H:i" }}",
+                    "endereco": "{{ agendamento.obra.endereco }}",
+                    "montador": "{{ agendamento.montador }}"
+                  }'>
+                <div class="event-compact">
+                  <span class="obra-numero">{{ agendamento.obra.numero }}</span>
+                  <span class="obra-nome">{{ agendamento.obra.nome }}</span>
+                </div>
+              </div>
+              {% empty %}
+              <div class="timeline-event empty">
+                Nenhum agendamento
+              </div>
+              {% endfor %}
+            </div>
+            </div>
+          {% endfor %} 
+          </div>
+            <button class="timeline-btn next" aria-label="Próximo dia">&#10095;</button>
+           </div>
     </div>
-  </div>
   
   <!-- Modal de detalhes -->
   <div class="event-modal" id="eventModal">
@@ -125,7 +141,7 @@
     </div>
   </div>
 </div>
-  </div>
+</div>
 </div>
 {% endblock %}
 
